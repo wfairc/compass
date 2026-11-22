@@ -23,26 +23,51 @@ button.on{background:var(--card);font-weight:600;border-color:var(--fg)}
 #hd{font-size:52px;font-weight:700;text-align:center;line-height:1.05}
 #hw{text-align:center;color:var(--mut);margin-bottom:6px}
 #acc{display:inline-block;font-size:13px;padding:2px 8px;border:1px solid var(--line);border-radius:10px;margin-left:6px}
-#acc.good{color:var(--ok);border-color:var(--ok)}#acc.bad{color:var(--bd);border-color:var(--bd)}
+#acc[hidden]{display:none}#acc.good{color:var(--ok);border-color:var(--ok)}#acc.bad{color:var(--bd);border-color:var(--bd)}
 table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}td{padding:7px 4px;border-top:1px solid var(--line)}td:first-child{color:var(--mut);width:48%}
 label{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--mut);margin:6px 0}
 input[type=number]{font:inherit;font-size:16px;width:90px;min-height:40px;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--fg)}
 .note{font-size:13px;color:var(--mut);margin-top:10px}
+
+.seg{display:flex;gap:6px;margin:8px 0}.seg button{font-size:14px;padding:0 4px;min-height:40px}
+#cmd{margin:6px 0;text-align:center;font-size:15px;min-height:44px}
+#cmd.ok{color:var(--ok);font-weight:600}
+.bw{display:flex;align-items:center;gap:6px;margin:8px 0}.bw span{color:var(--mut);font-size:15px;flex:1}
+.bw button.sm{flex:0 0 44px;padding:0;font-size:20px}.bw input[type=number]{width:76px;text-align:center}
+.bw button.use{flex:0 0 auto;padding:0 12px;font-size:14px}
+#demow{margin:8px 0}#demow input{width:100%}
+details{border-top:1px solid var(--line);padding:8px 0}summary{cursor:pointer;font-weight:600;min-height:32px}
+details p{margin:6px 0;font-size:15px}
+#decsvg{display:block;margin:6px auto;width:160px}
+input[type=range]{width:100%}
 </style></head><body>
 <h1>Compass</h1>
-<button id="go" type="button" style="width:100%">Start compass</button>
+<div class="row" style="margin-top:0"><button id="go" type="button">Start compass</button><button id="prac" type="button">Practice</button></div>
 <div id="msg">Tap Start compass. iPhone asks for permission once.</div>
+<div class="seg" id="styles" role="group" aria-label="Compass style">
+ <button type="button" data-st="simple" class="on">Simple</button><button type="button" data-st="marine">Marine</button><button type="button" data-st="base">Baseplate</button><button type="button" data-st="lens">Lensatic</button></div>
 <svg id="dial" viewBox="-110 -110 220 220" role="img" aria-label="Compass dial">
- <g id="rose"><circle r="100" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/>
+ <g id="gSimple"><g id="rose"><circle r="100" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/>
   <g id="ticks" stroke="currentColor" opacity=".5"></g>
   <text y="-80" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor">N</text>
   <text x="82" y="6" text-anchor="middle" font-size="16" fill="currentColor">E</text>
   <text y="92" text-anchor="middle" font-size="16" fill="currentColor">S</text>
   <text x="-82" y="6" text-anchor="middle" font-size="16" fill="currentColor">W</text></g>
- <path d="M0 -108 L8 -94 L-8 -94 Z" style="fill:var(--needle)"/><line x1="0" y1="-94" x2="0" y2="-40" style="stroke:var(--needle)" stroke-width="3"/><circle r="3" fill="currentColor"/>
+  <path d="M0 -108 L8 -94 L-8 -94 Z" style="fill:var(--needle)"/><line x1="0" y1="-94" x2="0" y2="-40" style="stroke:var(--needle)" stroke-width="3"/><circle r="3" fill="currentColor"/></g>
+ <g id="gMarine" hidden><circle r="100" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/><g id="mCard"></g>
+  <path d="M0 -104 L7 -90 L-7 -90 Z" style="fill:var(--needle)"/><line x1="0" y1="-90" x2="0" y2="-62" style="stroke:var(--needle)" stroke-width="3"/>
+  <path d="M0 -26 L12 18 L0 10 L-12 18 Z" fill="currentColor" opacity=".8"/></g>
+ <g id="gBase" hidden><g id="bRing"></g>
+  <g id="bNeedle"><path d="M0 -60 L7 0 L-7 0 Z" style="fill:var(--needle)"/><path d="M0 60 L7 0 L-7 0 Z" fill="currentColor" opacity=".45"/></g><circle r="3" fill="currentColor"/>
+  <path d="M0 -109 L8 -97 L-8 -97 Z" fill="currentColor"/></g>
+ <g id="gLens" hidden><g id="lCard"></g>
+  <line x1="0" y1="-102" x2="0" y2="-20" style="stroke:var(--needle)" stroke-width="1.5"/><path d="M0 -106 L5 -98 L-5 -98 Z" style="fill:var(--needle)"/><circle r="3" fill="currentColor"/></g>
 </svg>
 <div id="hd">--</div><div id="hw">heading<span id="acc" hidden></span></div>
+<div id="cmd"></div>
 <div class="row"><button id="ref" type="button">True N</button><button id="lock" type="button">Lock</button><button id="night" type="button">Night</button></div>
+<div class="bw"><span id="bl">Bearing</span><button class="sm" id="bm" type="button" aria-label="Minus 1">&minus;</button><input id="bin" type="number" min="0" max="359" value="0" aria-label="Bearing"><button class="sm" id="bp" type="button" aria-label="Plus 1">+</button><button class="use" id="buse" type="button">Use heading</button></div>
+<div id="demow" hidden><label style="display:block;margin:0 0 4px">Practice: turn the compass <b id="demov">0&deg;</b></label><input id="demo" type="range" min="0" max="359" value="0"></div>
 <table id="info">
  <tr><td>Altitude angle</td><td id="alt">--</td></tr>
  <tr><td>Phone</td><td id="tilt">--</td></tr>
@@ -53,24 +78,69 @@ input[type=number]{font:inherit;font-size:16px;width:90px;min-height:40px;paddin
 <div class="row"><button id="gps" type="button">Use my location</button></div>
 <label>Declination (° east)<input id="decin" type="number" step="0.1" min="-30" max="30" value="10"></label>
 <p class="note">Altitude angle is how high the back of the phone points above the horizon: hold the phone upright, back toward the target. Declination is the gap between magnetic and true north (about 10° east in Chandler, AZ); change it if you travel. Nothing is sent anywhere; the page works offline once loaded.</p>
+<h1 style="margin-top:18px">Learn</h1>
+<details><summary>How a compass works</summary><p>A compass needle is a small magnet. The Earth acts like a huge magnet, so the needle lines up with its field and one end points toward magnetic north. Everything else on a compass is a way to read that needle, or to turn it into a direction you can walk.</p><p>Your phone has no needle. It measures the Earth's field with a chip (a magnetometer) and works out the heading in software. Magnets, steel, cars and speakers bend the field, so they throw it off, the same as they would a needle.</p></details>
+<details><summary>Types of compass</summary>
+<p><b>Marine (card).</b> A card with the compass points floats in liquid on a magnet. The ship turns around the card; a fixed line (the lubber line) shows the heading. Try Marine, set a bearing, and steer until the line matches it.</p>
+<p><b>Baseplate (orienteering).</b> A clear plate with a turning ring. Set the bearing you want on the ring, then turn your whole body until the red needle sits inside the orienting arrow. The travel arrow now points the way to go. Many have a fold-up mirror: you sight the target over the lid and read the ring in the mirror at the same time, which is more accurate than looking down.</p>
+<p><b>Lensatic (military).</b> A floating card with a sighting wire and slot. You line the target up in the wire, and read the card through a small lens, so you can walk a bearing and read it without moving the compass. A prismatic compass does the same with a prism instead of a lens. Neither corrects for declination, so you do that yourself.</p>
+<p>The phone cannot copy the mirror or the lens. These views show the same reading the way each type presents it, so you can learn how each one is used.</p></details>
+<details><summary>Bearings and back bearing</summary><p>A bearing is a direction in degrees clockwise from north: 0 north, 90 east, 180 south, 270 west. The back bearing is the way you came: add 180 (or subtract 180 if the total passes 360). Walk 70 and the way back is 250.</p><p>To use the Bearing control: pick a number, or tap Use heading while pointing at something. Baseplate and Marine then tell you which way to turn, and Lensatic shows the back azimuth.</p></details>
+<details id="decd"><summary>True north and declination</summary><p>Magnetic north is not true (geographic) north. The gap is called declination. In Chandler it is about 10&deg; east, so a magnetic needle points about 10&deg; to the right of true north.</p>
+<svg id="decsvg" viewBox="-60 -60 120 120"><circle r="52" fill="none" stroke="currentColor" opacity=".4"/><line x1="0" y1="0" x2="0" y2="-50" stroke="currentColor" stroke-width="3"/><text y="-54" x="0" text-anchor="middle" font-size="9" fill="currentColor" transform="translate(0,-4)">True N</text><g id="decneedle"><path d="M0 -44 L5 0 L-5 0 Z" style="fill:var(--needle)"/></g></svg>
+<label style="display:block;margin:0">Try a declination: <b id="decv">10&deg; E</b></label><input id="decr" type="range" min="-20" max="20" step="1" value="10">
+<p>To get a true bearing from a magnetic reading, add east declination (subtract west). To set a magnetic compass to a true bearing from a map, do the reverse. A memory rule: east, magnetic least (the magnetic number is smaller than the true one).</p></details>
+<details><summary>Why the reading drifts</summary><p>Hold the phone flat, away from metal, phone cases with magnets, laptops and cars. If the badge says poor, move the phone in a figure 8 a few times to recalibrate. Tilt matters too: the heading is best when the phone is flat. For altitude angle, hold it upright, back toward the target.</p></details>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i);},S={};
 function ld(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}}
 function sv(k,v){try{localStorage.setItem(k,v);}catch(e){}}
-var useTrue=ld('cpTrue','1')==='1',night=ld('cpNight','0')==='1',dec=parseFloat(ld('cpDec','10')),locked=false,mag=null,acc=null,beta=null,gamma=null,evs=0,wait=null,lastDraw=0;
+var st=ld('cpStyle','simple'),B=parseInt(ld('cpB','0'),10)||0,demo=false,demoH=0,useTrue=ld('cpTrue','1')==='1',night=ld('cpNight','0')==='1',dec=parseFloat(ld('cpDec','10')),locked=false,mag=null,acc=null,beta=null,gamma=null,evs=0,wait=null,lastDraw=0;
 if(!isFinite(dec))dec=10;
 var tk='';for(var i=0;i<72;i++){var a=i*5,l=i%9===0?12:(i%3===0?8:4);tk+='<line x1="0" y1="-100" x2="0" y2="'+(-100+l)+'" transform="rotate('+a+')"/>';}$('ticks').innerHTML=tk;
 function msg(t,c){var m=$('msg');m.textContent=t;m.className=c||'';}
 var DR=['N','NE','E','SE','S','SW','W','NW'];
+function pad(n){n=((Math.round(n)%360)+360)%360;return (n<10?'00':n<100?'0':'')+n;}
+function curH(){if(demo)return demoH;if(mag===null)return null;return ((useTrue?mag+dec:mag)%360+360)%360;}
+var NS='http://www.w3.org/2000/svg';
+function tx(t,tr,fs,bold){return '<text transform="'+tr+'" text-anchor="middle" font-size="'+fs+'" '+(bold?'font-weight="700" ':'')+'fill="currentColor">'+t+'</text>';}
+function ring(step,lbl){var h='<circle r="100" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/><g stroke="currentColor" opacity=".55">';
+ for(var a=0;a<360;a+=step){var l=a%30===0?12:(a%10===0?8:4);h+='<line x1="0" y1="-100" x2="0" y2="'+(-100+l)+'" transform="rotate('+a+')"/>';}
+ h+='</g>';var N={0:'N',90:'E',180:'S',270:'W'};
+ for(var a2=0;a2<360;a2+=30){if(N[a2])h+=tx(N[a2],'rotate('+a2+') translate(0,-72)',18,1);else h+=tx(a2,'rotate('+a2+') translate(0,-76)',11,0);}
+ return h;}
+function mk(){$('mCard').innerHTML=ring(5)+'<g id="flag" transform="rotate(0)"><path d="M0 -99 L7 -111 L-7 -111 Z" style="fill:var(--ok)"/></g>';
+ $('bRing').innerHTML=ring(5)+'<circle r="64" fill="none" stroke="currentColor" opacity=".3"/><path d="M0 -62 L11 -34 L4 -34 L4 24 L-4 24 L-4 -34 L-11 -34 Z" fill="none" stroke="currentColor" stroke-width="2" opacity=".75"/>';
+ $('lCard').innerHTML=ring(5)+'<circle cx="0" cy="-90" r="2.6" fill="currentColor" opacity=".8"/>';}
+function diffTo(h){return ((B-h+540)%360)-180;}
+function turnTxt(d){var a=Math.abs(Math.round(d));return a<=2?null:('Turn '+a+'\u00B0 '+(d>0?'right':'left'));}
 function draw(){
- if(mag===null)return;
- var h=((useTrue?mag+dec:mag)%360+360)%360;
- if(!locked){$('hd').textContent=Math.round(h)%360+'°';$('hw').firstChild.textContent=DR[Math.round(h/45)%8]+(useTrue?' (true north)':' (magnetic north)');$('rose').setAttribute('transform','rotate('+(-h).toFixed(1)+')');}
- if(beta!==null){var al=beta-90;if(al>90)al=90;if(al<-90)al=-90;
-  if(!locked)$('alt').textContent=(al>=0?'+':'')+al.toFixed(0)+'°';
+ var h=curH();
+ ['Simple','Marine','Base','Lens'].forEach(function(x){$('g'+x).style.display=(st===x.toLowerCase())?'':'none';});
+ document.querySelectorAll('#styles button').forEach(function(b){b.classList.toggle('on',b.dataset.st===st);});
+ $('bl').textContent=st==='marine'?'Course to steer':(st==='lens'?'Sighted bearing':'Bearing');
+ $('bin').value=B;$('buse').style.display='';
+ if(h===null){$('cmd').textContent='';return;}
+ if(!locked){
+  $('hd').textContent=pad(h)+'\u00B0';
+  $('hw').firstChild.textContent=DR[Math.round(h/45)%8]+(demo?' (practice)':(useTrue?' (true north)':' (magnetic north)'));
+  $('rose').setAttribute('transform','rotate('+(-h).toFixed(1)+')');
+  $('mCard').setAttribute('transform','rotate('+(-h).toFixed(1)+')');
+  var fl=$('flag');if(fl)fl.setAttribute('transform','rotate('+B+')');
+  $('bRing').setAttribute('transform','rotate('+(-B)+')');
+  $('bNeedle').setAttribute('transform','rotate('+(-h).toFixed(1)+')');
+  $('lCard').setAttribute('transform','rotate('+(-h).toFixed(1)+')');
+  var d=diffTo(h),t=turnTxt(d),c=$('cmd');c.className='';
+  if(st==='marine'){if(t){c.textContent='Steering '+pad(h)+'\u00B0. To reach '+pad(B)+'\u00B0: '+t.toLowerCase()+'.';}else{c.textContent='On course '+pad(B)+'\u00B0';c.className='ok';}}
+  else if(st==='base'){if(t){c.textContent=t+' until the red needle sits in the orienting arrow (bearing set to '+pad(B)+'\u00B0).';}else{c.textContent='Needle is in the arrow. The travel arrow points along '+pad(B)+'\u00B0.';c.className='ok';}}
+  else if(st==='lens'){c.textContent='Lens reads '+pad(h)+'\u00B0 \u00B7 sighted '+pad(B)+'\u00B0, back azimuth '+pad(B+180)+'\u00B0'+(t?' \u00B7 '+t.toLowerCase()+' to line up.':' \u00B7 lined up.');if(!t)c.className='ok';}
+  else c.textContent='';}
+ if(!demo&&beta!==null){var al=beta-90;if(al>90)al=90;if(al<-90)al=-90;
+  if(!locked)$('alt').textContent=(al>=0?'+':'')+al.toFixed(0)+'\u00B0';
   var flat=Math.abs(beta)<25&&Math.abs(gamma||0)<25,up=beta>60&&beta<=180;
   $('tilt').textContent=flat?'Flat (heading is most reliable)':(up?'Upright (pointing)':'Tilted');}
+ else if(demo){$('alt').textContent='--';$('tilt').textContent='Practice mode';}
 }
 function badge(){var b=$('acc');if(acc===null||acc<0){b.hidden=true;return;}b.hidden=false;
  if(acc<=15){b.textContent='good ±'+Math.round(acc)+'°';b.className='good';}
@@ -81,7 +151,7 @@ function onE(e){evs++;
  if(typeof e.beta==='number'){beta=e.beta;gamma=e.gamma;}
  var n=Date.now();if(n-lastDraw<50)return;lastDraw=n;
  if(wait){clearTimeout(wait);wait=null;}
- if(mag!==null){msg('Compass working. The red marker is the way the phone points; N on the dial is north.','good');badge();draw();}}
+ if(mag!==null&&!demo){msg('Compass working. The red marker is the way the phone points; N on the dial is north.','good');badge();draw();}}
 function listen(){window.addEventListener('deviceorientationabsolute',onE,true);window.addEventListener('deviceorientation',onE,true);
  wait=setTimeout(function(){if(mag===null)msg('No compass data yet. Hold the phone flat, away from metal, and tap again.','bad');},3000);}
 $('go').onclick=function(){var D=window.DeviceOrientationEvent;
@@ -106,6 +176,16 @@ $('gps').onclick=function(){if(!navigator.geolocation){$('pos').textContent='Not
   $('pos').textContent=c.latitude.toFixed(4)+', '+c.longitude.toFixed(4)+' (±'+Math.round(c.accuracy)+' m)';
   $('elev').textContent=(c.altitude!=null&&isFinite(c.altitude))?Math.round(c.altitude)+' m / '+Math.round(c.altitude*3.28084)+' ft'+(c.altitudeAccuracy?' (±'+Math.round(c.altitudeAccuracy)+' m)':''):'Not reported';},
   function(er){$('pos').textContent=er.code===1?'Location blocked':'Could not get a fix';},{enableHighAccuracy:true,timeout:15000,maximumAge:60000});};
+
+function setB(v){B=((Math.round(v)%360)+360)%360;sv('cpB',String(B));draw();}
+document.querySelectorAll('#styles button').forEach(function(b){b.onclick=function(){st=b.dataset.st;sv('cpStyle',st);draw();};});
+$('bm').onclick=function(){setB(B-1);};$('bp').onclick=function(){setB(B+1);};
+$('bin').onchange=function(){var v=parseInt(this.value,10);setB(isFinite(v)?v:B);};
+$('buse').onclick=function(){var h=curH();if(h!==null)setB(h);};
+$('prac').onclick=function(){demo=!demo;this.classList.toggle('on',demo);$('demow').hidden=!demo;if(demo){$('acc').hidden=true;msg('Practice mode: drag the slider to turn the compass. No sensor needed.','good');}else{msg(mag===null?'Tap Start compass for the live compass.':'Live compass.','');badge();}draw();};
+$('demo').oninput=function(){demoH=parseInt(this.value,10)||0;$('demov').textContent=demoH+'\u00B0';draw();};
+function decUI(){var v=parseInt($('decr').value,10);$('decneedle').setAttribute('transform','rotate('+v*2+')');$('decv').textContent=Math.abs(v)+'\u00B0 '+(v>=0?'E':'W');}
+$('decr').oninput=decUI;decUI();mk();
 nightUI();refUI();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
 })();
