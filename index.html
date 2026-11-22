@@ -54,7 +54,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <div id="msg">Tap Start compass. iPhone asks for permission once.</div>
 <div class="seg" id="styles" role="group" aria-label="Compass style">
  <button type="button" data-st="simple" class="on">Simple</button><button type="button" data-st="marine">Marine</button><button type="button" data-st="base">Baseplate</button><button type="button" data-st="lens">Lensatic</button></div>
-<div id="how"><details id="howd"><summary id="hows">Simple compass</summary><ol id="howl"></ol></details></div>
+<div id="how"><details id="howd"><summary id="hows">Simple compass</summary><div class="seg" id="lvl" role="group" aria-label="Instructions level"><button type="button" data-lv="0">Beginner</button><button type="button" data-lv="1">Intermediate</button><button type="button" data-lv="2">Advanced</button></div><ol id="howl"></ol></details></div>
 <svg id="dial" viewBox="-110 -110 220 220" role="img" aria-label="Compass dial">
  <g id="gSimple"><g id="rose"><circle r="100" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/>
   <g id="ticks" stroke="currentColor" opacity=".5"></g>
@@ -116,7 +116,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 var $=function(i){return document.getElementById(i);},S={};
 function ld(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}}
 function sv(k,v){try{localStorage.setItem(k,v);}catch(e){}}
-var st=ld('cpStyle','simple'),B=parseInt(ld('cpB','0'),10)||0,demo=false,demoH=0,useTrue=ld('cpTrue','1')==='1',night=ld('cpNight','0')==='1',dec=parseFloat(ld('cpDec','10')),locked=false,mag=null,acc=null,beta=null,gamma=null,evs=0,wait=null,lastDraw=0;
+var lvl=Math.min(2,Math.max(0,parseInt(ld('cpLvl','0'),10)||0)),st=ld('cpStyle','simple'),B=parseInt(ld('cpB','0'),10)||0,demo=false,demoH=0,useTrue=ld('cpTrue','1')==='1',night=ld('cpNight','0')==='1',dec=parseFloat(ld('cpDec','10')),locked=false,mag=null,acc=null,beta=null,gamma=null,evs=0,wait=null,lastDraw=0;
 if(!isFinite(dec))dec=10;
 var tk='';for(var i=0;i<72;i++){var a=i*5,l=i%9===0?12:(i%3===0?8:4);tk+='<line x1="0" y1="-100" x2="0" y2="'+(-100+l)+'" transform="rotate('+a+')"/>';}$('ticks').innerHTML=tk;
 function msg(t,c){var m=$('msg');m.textContent=t;m.className=c||'';}
@@ -139,10 +139,23 @@ function mk(){$('mCard').innerHTML=ring(5)+'<g id="flag" transform="rotate(0)"><
  var ol='';for(var x=-48;x<=48;x+=16)ol+='<line x1="'+x+'" y1="-60" x2="'+x+'" y2="60" class="bzl" stroke-width="1" opacity=".45"/>';
  $('bRing').innerHTML=ring2(2,'bz')+'<clipPath id="cap"><circle r="62"/></clipPath><g clip-path="url(#cap)">'+ol+'</g><circle r="64" fill="none" class="bzl" opacity=".5"/><path id="bArrow" d="M0 -62 L12 -34 L5 -34 L5 24 L-5 24 L-5 -34 L-12 -34 Z" fill="none" class="bzl" stroke-width="2.4"/>';
  $('lCard').innerHTML=ring(5)+'<circle cx="0" cy="-90" r="2.6" fill="currentColor" opacity=".8"/>';}
-var HOW={simple:['Simple compass','Read the heading',['Hold the phone flat and still.','The dial turns so N always points to north. The red marker is the way the phone points.','Read the number under the dial. Use Lock to freeze it.']],
-marine:['Marine compass','Steer a course',['Set the Course to steer (or tap Use heading while pointing the way you want to go).','The card turns under a fixed red line, the lubber line. The green flag on the card is your course.','Turn until the red line sits on the green flag. Then hold that heading.']],
-base:['Baseplate compass','Red in the shed',['Set the Bearing. The ring turns to put that number at the top, in front of the travel arrow.','Hold the phone flat in front of you, travel arrow pointing away.','Turn your whole body until the red needle sits inside the hollow orienting arrow: red in the shed. (The dog in the doghouse.)','The travel arrow now points along your bearing. Pick a landmark on that line, walk to it, then repeat.']],
-lens:['Lensatic compass','Sight and read',['Line the sighting wire up on your target.','Read the number in the Lens window, then tap Use heading to save it as the Sighted bearing.','The back azimuth (the way back) is shown with it. To walk it later, turn until it says lined up.']]};
+var HOW={simple:['Simple compass','Read the heading',[
+['Hold the phone flat and still.','The dial turns so N always points to north. The red marker is the way the phone points.','Read the number under the dial. Use Lock to freeze it.'],
+['Keep the phone flat: tilt costs accuracy.','Use True N for map work and Magnetic N to match a physical compass.','If the badge says poor, wave a figure 8 and step away from metal.'],
+['Typical error is about 10\u00B0; cars, steel buildings and magnets are far worse.','Check the declination value before relying on True N.','Cross-check against a landmark, the Sun or Polaris before trusting it.']]],
+marine:['Marine compass','Steer a course',[
+['Set the Course to steer (or tap Use heading while pointing the way you want to go).','The card turns under a fixed red line, the lubber line. The green flag on the card is your course.','Turn until the red line sits on the green flag. Then hold that heading.'],
+['Steer so the lubber line sits on the flag; the text says how many degrees to turn and which way.','Make small corrections. Big swings overshoot.','Once on course, pick a far object on that line and steer by it.'],
+['Convert true to magnetic with variation (declination). Deviation, the error from the boat\u2019s own metal, is not modelled here.','Course to steer is not course made good: wind or current sets you sideways, so correct for it.','Check the compass against the object now and then.']]],
+base:['Baseplate compass','Red in the shed',[
+['Set the Bearing. The ring turns to put that number at the top, in front of the travel arrow.','Hold the phone flat in front of you, travel arrow pointing away.','Turn your whole body until the red needle sits inside the hollow orienting arrow: red in the shed. (The dog in the doghouse.)','The travel arrow now points along your bearing. Pick a landmark on that line, walk to it, then repeat.'],
+['From a map: lay the plate edge along A to B, turn the ring until the orienting lines match the map\u2019s north lines, read the bearing, then take off east declination to get magnetic.','In the app: set the Bearing and turn until the arrow turns green.','Walk to a landmark on the line, then re-check each leg.'],
+['Aim off: steer deliberately to one side of a line target (a road, a stream) so you know which way to turn when you hit it.','Use handrails (ridges, streams) and attack points. Count double paces: roughly 60 to 70 per 100 m, so measure your own.','Keep metal, phones and watches away from the needle, and re-sight after every obstacle.','Resection: sight two landmarks, add or subtract 180 for the back bearings, and draw them on the map. You are where they cross.']]],
+lens:['Lensatic compass','Sight and read',[
+['Line the sighting wire up on your target.','Read the number in the Lens window, then tap Use heading to save it as the Sighted bearing.','The back azimuth (the way back) is shown with it. To walk it later, turn until it says lined up.'],
+['Sight, read, then Use heading to save.','Back azimuth is the bearing plus or minus 180.','Lined up means within about 2\u00B0.'],
+['A lensatic reads magnetic and has no declination setting: convert with the map\u2019s grid-magnetic angle.','Sight at eye level with the elbow braced, to cut parallax.','Many lensatic cards also carry a mils scale (6400 per circle). This practice face shows degrees only.']]]};
+var LVN=['Beginner','Intermediate','Advanced'];
 function diffTo(h){return ((B-h+540)%360)-180;}
 function turnTxt(d){var a=Math.abs(Math.round(d));return a<=2?null:('Turn '+a+'\u00B0 '+(d>0?'right':'left'));}
 function draw(){
@@ -150,7 +163,7 @@ function draw(){
  ['Simple','Marine','Base','Lens'].forEach(function(x){$('g'+x).style.display=(st===x.toLowerCase())?'':'none';});
  document.querySelectorAll('#styles button').forEach(function(b){b.classList.toggle('on',b.dataset.st===st);});
  $('bl').textContent=st==='marine'?'Course to steer':(st==='lens'?'Sighted bearing':'Bearing');
- $('bin').value=B;$('buse').style.display='';var hw=HOW[st];$('hows').textContent=hw[0]+' \u2014 '+hw[1];$('howl').innerHTML=hw[2].map(function(t){return '<li>'+t+'</li>';}).join('');
+ $('bin').value=B;$('buse').style.display='';var hw=HOW[st];$('hows').textContent=hw[0]+' \u2014 '+hw[1];document.querySelectorAll('#lvl button').forEach(function(b){b.classList.toggle('on',+b.dataset.lv===lvl);});$('howl').innerHTML=hw[2][lvl].map(function(t){return '<li>'+t+'</li>';}).join('');
  if(h===null){$('cmd').textContent='';return;}
  if(!locked){
   $('hd').textContent=pad(h)+'\u00B0';
@@ -209,6 +222,7 @@ $('gps').onclick=function(){if(!navigator.geolocation){$('pos').textContent='Not
 
 function setB(v){B=((Math.round(v)%360)+360)%360;sv('cpB',String(B));draw();}
 document.querySelectorAll('#styles button').forEach(function(b){b.onclick=function(){st=b.dataset.st;sv('cpStyle',st);draw();};});
+document.querySelectorAll('#lvl button').forEach(function(b){b.onclick=function(){lvl=+b.dataset.lv;sv('cpLvl',String(lvl));draw();};});
 $('bm').onclick=function(){setB(B-1);};$('bp').onclick=function(){setB(B+1);};
 $('bin').onchange=function(){var v=parseInt(this.value,10);setB(isFinite(v)?v:B);};
 $('buse').onclick=function(){var h=curH();if(h!==null)setB(h);};
