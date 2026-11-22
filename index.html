@@ -39,7 +39,7 @@ input[type=number]{font:inherit;font-size:16px;width:90px;min-height:40px;paddin
   <text x="82" y="6" text-anchor="middle" font-size="16" fill="currentColor">E</text>
   <text y="92" text-anchor="middle" font-size="16" fill="currentColor">S</text>
   <text x="-82" y="6" text-anchor="middle" font-size="16" fill="currentColor">W</text></g>
- <path d="M0 -62 L9 0 L0 12 L-9 0 Z" style="fill:var(--needle)"/><path d="M0 62 L9 0 L0 -12 L-9 0 Z" fill="currentColor" opacity=".45"/>
+ <path d="M0 -108 L8 -94 L-8 -94 Z" style="fill:var(--needle)"/><line x1="0" y1="-94" x2="0" y2="-40" style="stroke:var(--needle)" stroke-width="3"/><circle r="3" fill="currentColor"/>
 </svg>
 <div id="hd">--</div><div id="hw">heading<span id="acc" hidden></span></div>
 <div class="row"><button id="ref" type="button">True N</button><button id="lock" type="button">Lock</button><button id="night" type="button">Night</button></div>
@@ -81,7 +81,7 @@ function onE(e){evs++;
  if(typeof e.beta==='number'){beta=e.beta;gamma=e.gamma;}
  var n=Date.now();if(n-lastDraw<50)return;lastDraw=n;
  if(wait){clearTimeout(wait);wait=null;}
- if(mag!==null){msg('Compass working. Red end points north.','good');badge();draw();}}
+ if(mag!==null){msg('Compass working. The red marker is the way the phone points; N on the dial is north.','good');badge();draw();}}
 function listen(){window.addEventListener('deviceorientationabsolute',onE,true);window.addEventListener('deviceorientation',onE,true);
  wait=setTimeout(function(){if(mag===null)msg('No compass data yet. Hold the phone flat, away from metal, and tap again.','bad');},3000);}
 $('go').onclick=function(){var D=window.DeviceOrientationEvent;
