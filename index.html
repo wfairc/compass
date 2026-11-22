@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b1d1f">
+<title>Compass test</title>
+<style>
+:root{--bg:#fafaf7;--fg:#1d1d1b;--mut:#6b6b66;--line:#d9d8d2;--card:#efeee9;--ok:#2f7d4f;--bd:#b3261e}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1d1f;--fg:#ecebe6;--mut:#a3a29c;--line:#3a3c3e;--card:#26282a;--ok:#6fcf97;--bd:#f2a29b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 -apple-system,system-ui,sans-serif;padding:16px max(16px,env(safe-area-inset-right)) 32px max(16px,env(safe-area-inset-left))}
+h1{font-size:22px;margin:4px 0 2px}.sub{color:var(--mut);font-size:14px;margin:0 0 14px}
+button{font:inherit;font-size:16px;min-height:44px;padding:0 16px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:8px;cursor:pointer;width:100%}
+button.on{background:var(--card);font-weight:600}
+#dial{display:block;margin:14px auto;width:min(78vw,300px);height:auto}
+#hd{font-size:44px;font-weight:700;text-align:center;line-height:1.1}#hw{text-align:center;color:var(--mut);margin-bottom:8px}
+#msg{margin:10px 0;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-size:15px}
+#msg.bad{border-color:var(--bd);color:var(--bd)}#msg.good{border-color:var(--ok);color:var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}td{padding:6px 4px;border-top:1px solid var(--line)}td:first-child{color:var(--mut);width:46%}
+.row{display:flex;gap:8px;margin:8px 0}
+</style></head><body>
+<h1>Compass test</h1>
+<p class="sub">Checks whether your phone lets this page read its compass. Nothing is sent anywhere.</p>
+<button id="go" type="button">Start compass</button>
+<div id="msg">Tap Start compass. iPhone will ask for permission once.</div>
+<svg id="dial" viewBox="-110 -110 220 220" role="img" aria-label="Compass dial">
+ <g id="rose"><circle r="100" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/>
+  <text y="-82" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor">N</text>
+  <text x="84" y="6" text-anchor="middle" font-size="16" fill="currentColor">E</text>
+  <text y="94" text-anchor="middle" font-size="16" fill="currentColor">S</text>
+  <text x="-84" y="6" text-anchor="middle" font-size="16" fill="currentColor">W</text></g>
+ <path d="M0 -62 L9 0 L0 12 L-9 0 Z" fill="#c0392b"/><path d="M0 62 L9 0 L0 -12 L-9 0 Z" fill="currentColor" opacity=".45"/>
+</svg>
+<div id="hd">--</div><div id="hw">heading</div>
+<table id="info"></table>
+<div class="row"><button id="copy" type="button">Copy results</button></div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);},T={},n=0,t0=0,evs=0,last=null,wait=null;
+function row(k,v){T[k]=v;var h='';Object.keys(T).forEach(function(x){h+='<tr><td>'+x+'</td><td>'+String(T[x]).replace(/[<>&]/g,'')+'</td></tr>';});$('info').innerHTML=h;}
+function msg(t,c){var m=$('msg');m.textContent=t;m.className=c||'';}
+var DR=['N','NE','E','SE','S','SW','W','NW'];
+function show(h,src){last=h;$('hd').textContent=Math.round(h)+'°';$('hw').textContent=DR[Math.round(h/45)%8]+' ('+src+')';$('rose').setAttribute('transform','rotate('+(-h).toFixed(1)+')');}
+function onE(e){evs++;var h=null,src='';
+ if(typeof e.webkitCompassHeading==='number'&&isFinite(e.webkitCompassHeading)){h=e.webkitCompassHeading;src='iOS compass';row('accuracy (deg)',e.webkitCompassAccuracy);}
+ else if(e.absolute&&typeof e.alpha==='number'){h=(360-e.alpha)%360;src='absolute alpha';}
+ else if(typeof e.alpha==='number'){h=(360-e.alpha)%360;src='relative alpha (not north!)';}
+ row('events',evs);row('alpha',e.alpha==null?'-':e.alpha.toFixed(1));row('beta',e.beta==null?'-':e.beta.toFixed(1));row('gamma',e.gamma==null?'-':e.gamma.toFixed(1));row('absolute flag',e.absolute);
+ if(h!==null){show(h,src);if(wait){clearTimeout(wait);wait=null;}msg('Compass is working. The red end points to magnetic north.','good');}}
+function listen(){window.addEventListener('deviceorientationabsolute',onE,true);window.addEventListener('deviceorientation',onE,true);
+ wait=setTimeout(function(){if(!evs){msg('Permission was granted but no compass data arrived. Try again in a moment, away from metal, with the phone held flat.','bad');row('result','no events after 3s');}},3000);}
+function diag(){row('secure context (https)',window.isSecureContext);row('top-level page',window.top===window);
+ row('DeviceOrientationEvent',typeof DeviceOrientationEvent);row('requestPermission',typeof (window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission));
+ row('page address',location.protocol+'//'+location.host);}
+$('go').onclick=function(){var D=window.DeviceOrientationEvent;diag();evs=0;
+ if(!D){msg('This browser does not offer compass data.','bad');row('result','no DeviceOrientationEvent');return;}
+ if(typeof D.requestPermission==='function'){msg('Asking for compass permission...');
+  D.requestPermission().then(function(r){row('permission answer',r);if(r==='granted'){$('go').classList.add('on');$('go').textContent='Compass on';listen();msg('Permission granted. Reading the compass...');}
+   else{msg('Your phone answered "'+r+'". If no prompt appeared, close this tab completely and reopen the page; Safari remembers a refusal until then.','bad');row('result','denied');}})
+  .catch(function(er){msg('Could not ask for permission: '+(er&&er.name||'error')+'. This page may need to be opened as its own page (not inside another app).','bad');row('result','error '+(er&&er.name));});}
+ else{row('permission answer','not needed');listen();msg('Reading the compass...');}};
+$('copy').onclick=function(){var t=Object.keys(T).map(function(k){return k+': '+T[k];}).join('\n');try{navigator.clipboard.writeText(t).then(function(){$('copy').textContent='Copied';});}catch(e){$('copy').textContent='Copy not allowed here';}};
+diag();
+})();
+</script></body></html>
