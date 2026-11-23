@@ -110,13 +110,6 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p><b>Sun and a stick.</b> Push a stick upright. Mark the end of its shadow, wait 15 minutes, mark it again. The line from the first mark to the second runs roughly west to east.</p>
 <p><b>Polaris.</b> In the northern hemisphere the North Star is within about 1&deg; of true north. Find it by following the two end stars of the Big Dipper's bowl, or look for the W of Cassiopeia on the opposite side. Its height above the horizon equals your latitude (about 33&deg; in Chandler).</p>
 <p><b>Rough clues.</b> The Sun rises roughly east and sets roughly west. At solar noon it is due south (north of 23.4&deg;N, which includes Arizona), and its shadow points north.</p></details>
-<details id="drl"><summary>Practice drills</summary>
-<div class="seg" id="drm" role="group" aria-label="Number drills"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="3">Which north</button><button type="button" data-d="2">Aim</button></div>
-<div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button><button type="button" data-d="7">Polar</button></div>
-<p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div>
-<div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
-<div class="row"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
-<p id="df" style="min-height:24px;font-weight:600"></p><p class="note" id="dsc"></p><p class="note"><a href="#" id="drr">Reset progress</a></p></details>
 <h1 style="margin-top:18px;font-size:18px">Land navigation course</h1>
 <p class="note" style="margin-top:0">A plain-language summary of the standard methods taught in military land navigation courses, written from general knowledge. It is not the official manual and not a replacement for training or practice on the ground.</p>
 <details><summary>1. Reading the map: grids, scale, contours</summary>
@@ -158,6 +151,17 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p>Go slower and rely on pace count, handrails and catching features more than on seeing landmarks. Use a red light to read the map and compass, which keeps your night vision. Re-check your position more often. The luminous marks on a compass help you hold an azimuth, but they do not replace checking the map.</p></details>
 <details><summary>12. Common mistakes</summary>
 <p>Using the wrong north (grid versus magnetic) or applying the declination the wrong way. Holding the compass near metal. Not counting paces on slopes. Trusting one shot instead of two or three. Walking on an azimuth for too long without a checkpoint. Reading a grid reference up before right.</p></details>
+<details id="drl"><summary>Practice</summary>
+<div class="seg" id="dmode" role="group" aria-label="Mode"><button type="button" data-m="d" class="on">Drills</button><button type="button" data-m="t">Test</button></div>
+<div id="dsel"><p class="note" style="margin:8px 0 2px">Numbers</p><div class="seg" id="drm" role="group" aria-label="Number drills"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="3">Which north</button><button type="button" data-d="2">Aim</button></div>
+<p class="note" style="margin:8px 0 2px">Map</p><div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button><button type="button" data-d="7">Polar</button></div></div>
+<div id="tst" style="display:none"><p class="note" id="tinfo"></p><div class="row"><button type="button" id="tgo">Start test</button></div></div>
+<p class="note" id="tcnt" style="display:none;margin:8px 0 0"></p>
+<div id="qbox"><p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div><div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
+<div class="row" id="drow"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
+<p id="df" style="min-height:24px;font-weight:600"></p></div>
+<p class="note" id="dsc"></p><div id="tres" style="display:none"></div>
+<p class="note" id="drrp"><a href="#" id="drr">Reset progress</a></p></details>
 <details><summary>Why the reading drifts</summary><p>Hold the phone flat, away from metal, phone cases with magnets, laptops and cars. If the badge says poor, move the phone in a figure 8 a few times to recalibrate. Tilt matters too: the heading is best when the phone is flat. For altitude angle, hold it upright, back toward the target.</p></details>
 <script>
 (function(){
@@ -339,6 +343,7 @@ var DRILLS=[
 ];
 var PG={};try{PG=JSON.parse(ld('cpProg','{}'))||{};}catch(e){PG={};}
 function drSc(){var d=DRILLS[DR.m],p=PG[d.id],o=DR.t?'Right: '+DR.r+' of '+DR.t:'';if(p&&p[1])o+=(o?' ':'')+(DR.t?'(all time ':'All time ')+Math.round(p[0]/p[1]*100)+'%'+(DR.t?')':'');$('dsc').textContent=o;}
+function pgAdd(id,ok){var p=PG[id]||[0,0];p=[p[0]+(ok?1:0),p[1]+1];if(p[1]>999)p=[Math.round(p[0]*500/p[1]),500];PG[id]=p;sv('cpProg',JSON.stringify(PG));}
 function tapCheck(q,f,d){if(!DR.tap){f.textContent='Tap the map first.';f.style.color='';return null;}if(DR.done)return null;
  var dd=dist(DR.tap,q.ans),ok=dd<=q.tol;DR.done=1;
  f.textContent=ok?'Right. Within '+fx(dd)+' squares.':'About '+fx(dd)+' squares off. The green ring is the answer.'+(d.hint?d.hint(q,DR.tap):'');plDraw();return ok;}
@@ -358,13 +363,35 @@ function drNew(){var m=DR.m,d=DRILLS[m],q={};DR.tap=null;DR.done=0;$('df').textC
 $('pls').addEventListener('click',function(e){if(DRILLS[DR.m].kind!=='tap'||DR.done)return;var r=this.getBoundingClientRect();DR.tap=[(e.clientX-r.left)/r.width*10,10-(e.clientY-r.top)/r.height*10];plDraw();});
 function drCheck(){var q=DR.q,f=$('df'),d=DRILLS[DR.m],ok;if(!q)return;
  ok=d.check?d.check(q,f):d.kind==='tap'?tapCheck(q,f,d):numCheck(q,f,d);if(ok===null)return;DR.t++;if(ok)DR.r++;
- var p=PG[d.id]||[0,0];p=[p[0]+(ok?1:0),p[1]+1];if(p[1]>999){p=[Math.round(p[0]*500/p[1]),500];}PG[d.id]=p;sv('cpProg',JSON.stringify(PG));
+ pgAdd(d.id,ok);
  f.style.color=ok?'var(--ok)':'var(--bd)';drSc();}
-$('drr').onclick=function(e){e.preventDefault();if(!confirm('Clear all practice and test progress?'))return;PG={};DR.r=0;DR.t=0;try{localStorage.removeItem('cpProg');localStorage.removeItem('cpTest');}catch(x){}drSc();};
+$('drr').onclick=function(e){e.preventDefault();if(!confirm('Clear all practice and test progress?'))return;PG={};DR.r=0;DR.t=0;try{localStorage.removeItem('cpProg');localStorage.removeItem('cpTest');}catch(x){}drSc();if($('tst').style.display!=='none')tsInfo();};
 document.querySelectorAll('#drm button,#drp button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
-function openDrill(id){var i=DRILLS.findIndex(function(x){return x.id===id;});if(i<0)return;DR.m=i;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',+x.dataset.d===i);});drNew();$('drl').open=true;$('drl').scrollIntoView();}
+function openDrill(id){setMode('d');var i=DRILLS.findIndex(function(x){return x.id===id;});if(i<0)return;DR.m=i;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',+x.dataset.d===i);});drNew();$('drl').open=true;$('drl').scrollIntoView();}
 document.querySelectorAll('.pr').forEach(function(b){b.onclick=function(){openDrill(b.dataset.p);};});
-$('dck').onclick=drCheck;$('dnx').onclick=drNew;drNew();window.cpTest={DR:DR,azOf:azOf,adiff:adiff,drNew:drNew};
+var TS={on:0,i:0,l:[],res:[]},TOP={num:0,map:1,ground:2};
+function g(id,s){$(id).style.display=s?'':'none';}
+function view(v){var d=v==='d',q=v==='q',i=v==='i',r=v==='r';g('dsel',d);g('qbox',d||q);g('dnx',d);g('dsc',d);g('tst',i);g('tcnt',q);g('tres',r);g('drrp',!q);$('dck').textContent=d?'Check':'Next';}
+function tsInfo(){var T={};try{T=JSON.parse(ld('cpTest','{}'))||{};}catch(e){}$('tinfo').textContent='10 questions. No hints, and no answers until the end.'+(T.count?' Best '+T.best+' of 10. Last '+T.last+' of 10. Taken '+T.count+(T.count>1?' times.':' time.'):'');}
+function setMode(m){TS.on=0;document.querySelectorAll('#dmode button').forEach(function(b){b.classList.toggle('on',b.dataset.m===m);});if(m==='d'){view('d');drNew();}else{view('i');tsInfo();}}
+function tsList(){var el=[];DRILLS.forEach(function(d,k){if(d.kind!=='sensor')el.push(k);});var l=el.slice();while(l.length<10)l.push(el[Math.floor(Math.random()*el.length)]);l=l.slice(0,10);return l.sort(function(a,b){return TOP[DRILLS[a].topic]-TOP[DRILLS[b].topic]||a-b;});}
+function tsQ(){DR.m=TS.l[TS.i];drNew();$('plh').textContent='';$('df').textContent='';$('tcnt').textContent='Question '+(TS.i+1)+' of 10';$('dck').textContent=TS.i===9?'Finish':'Next';}
+function tsStart(){TS.on=1;TS.i=0;TS.res=[];TS.l=tsList();view('q');tsQ();}
+function tsNext(){var d=DRILLS[DR.m],q=DR.q,f=$('df'),ok,a;
+ if(d.kind==='tap'){if(!DR.tap){f.textContent='Tap the map first.';return;}var dd=dist(DR.tap,q.ans);ok=dd<=q.tol;a='Right answer: x '+fx(q.ans[0])+', y '+fx(q.ans[1])+' (squares from the bottom left). You were '+fx(dd)+' squares off.';}
+ else{var v=parseInt($('da').value,10);if(!isFinite(v)){f.textContent='Type a number first.';return;}v=((v%360)+360)%360;ok=v===q.ans;a='Right answer: '+pad(q.ans)+'°. You wrote '+pad(v)+'°.';}
+ f.textContent='';TS.res.push({id:d.id,ok:ok,q:$('dq').textContent,a:a});pgAdd(d.id,ok);TS.i++;if(TS.i<10)tsQ();else tsEnd();}
+function tsEnd(){TS.on=0;view('r');var sc=TS.res.filter(function(r){return r.ok;}).length,by={},weak=null,h='';
+ TS.res.forEach(function(r){var b=by[r.id]||(by[r.id]=[0,0]);b[1]++;if(r.ok)b[0]++;});
+ DRILLS.forEach(function(d){var b=by[d.id];if(!b||b[0]===b[1])return;var rt=b[0]/b[1],at=PG[d.id]&&PG[d.id][1]?PG[d.id][0]/PG[d.id][1]:1;if(!weak||rt<weak.rt||(rt===weak.rt&&at<weak.at))weak={n:d.name,rt:rt,at:at};});
+ h='<p style="font-size:18px;font-weight:700;margin:8px 0">'+sc+' of 10.'+(weak?' Work on: '+weak.n+'.':' No misses.')+'</p>';
+ TS.res.forEach(function(r){if(r.ok)return;h+='<div style="border-top:1px solid var(--line);padding:8px 0"><div>'+r.q+'</div><div class="note">'+r.a+'</div><div class="row"><button type="button" class="pr" data-p="'+r.id+'">Practice this</button></div></div>';});
+ h+='<div class="row"><button type="button" id="tagain">Try again</button><button type="button" id="tback">Back to drills</button></div>';$('tres').innerHTML=h;
+ var T={};try{T=JSON.parse(ld('cpTest','{}'))||{};}catch(e){}sv('cpTest',JSON.stringify({best:Math.max(T.best||0,sc),last:sc,count:(T.count||0)+1,date:new Date().toISOString().slice(0,10)}));}
+document.querySelectorAll('#dmode button').forEach(function(b){b.onclick=function(){setMode(b.dataset.m);};});
+$('tgo').onclick=tsStart;
+$('tres').onclick=function(e){var t=e.target;if(t.classList.contains('pr'))openDrill(t.dataset.p);else if(t.id==='tagain')tsStart();else if(t.id==='tback')setMode('d');};
+$('dck').onclick=function(){if(TS.on)tsNext();else drCheck();};$('dnx').onclick=drNew;drNew();window.cpTest={DR:DR,azOf:azOf,adiff:adiff,drNew:drNew};
 nightUI();refUI();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
 })();
