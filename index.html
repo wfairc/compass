@@ -29,7 +29,7 @@ label{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--mut);ma
 input[type=number]{font:inherit;font-size:16px;width:90px;min-height:40px;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--fg)}
 .note{font-size:13px;color:var(--mut);margin-top:10px}
 
-.seg{display:flex;gap:6px;margin:8px 0}.seg button{font-size:14px;padding:0 4px;min-height:40px}
+.seg{display:flex;gap:6px;margin:8px 0;flex-wrap:wrap}.seg button{flex:1 1 20%}.seg button{font-size:14px;padding:0 4px;min-height:40px}
 #cmd{margin:6px 0;text-align:center;font-size:15px;min-height:44px}
 #cmd.ok{color:var(--ok);font-weight:600}
 .bw{display:flex;align-items:center;gap:6px;margin:8px 0}.bw span{color:var(--mut);font-size:15px;flex:1}
@@ -111,8 +111,9 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p><b>Polaris.</b> In the northern hemisphere the North Star is within about 1&deg; of true north. Find it by following the two end stars of the Big Dipper's bowl, or look for the W of Cassiopeia on the opposite side. Its height above the horizon equals your latitude (about 33&deg; in Chandler).</p>
 <p><b>Rough clues.</b> The Sun rises roughly east and sets roughly west. At solar noon it is due south (north of 23.4&deg;N, which includes Arizona), and its shadow points north.</p></details>
 <details id="drl"><summary>Practice drills</summary>
-<div class="seg" id="drm" role="group" aria-label="Drill type"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="2">Aim</button></div>
-<p id="dq" style="font-size:16px;margin:8px 0"></p>
+<div class="seg" id="drm" role="group" aria-label="Number drills"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="3">Which north</button><button type="button" data-d="2">Aim</button></div>
+<div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button></div>
+<p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div>
 <div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
 <div class="row"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
 <p id="df" style="min-height:24px;font-weight:600"></p><p class="note" id="dsc"></p></details>
@@ -282,24 +283,68 @@ $('demo').oninput=function(){demoH=parseInt(this.value,10)||0;$('demov').textCon
 function decUI(){var v=parseInt($('decr').value,10);$('decneedle').setAttribute('transform','rotate('+v*2+')');$('decv').textContent=Math.abs(v)+'\u00B0 '+(v>=0?'E':'W');}
 $('decr').oninput=decUI;decUI();mk();
 
-var DR={m:0,q:null,r:0,t:0};
+var DR={m:0,q:null,r:0,t:0,tap:null,done:0};
 function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1));}
-function drNew(){var m=DR.m,q={};$('df').textContent='';$('df').style.color='';$('da').value='';
- $('dar').style.display=m===2?'none':'';
- if(m===0){q.a=rnd(1,359);q.ans=(q.a+180)%360;$('dq').textContent='Your azimuth is '+pad(q.a)+'\u00B0. What is the back azimuth?';}
- else if(m===1){var e=Math.random()<.5,d=rnd(5,15),g=rnd(10,350),toMag=Math.random()<.5;q.d=d;
-  if(toMag){q.ans=((e?g-d:g+d)%360+360)%360;$('dq').textContent='The map azimuth is '+pad(g)+'\u00B0. Declination is '+d+'\u00B0 '+(e?'east':'west')+'. What does the compass read?';}
-  else{q.ans=((e?g+d:g-d)%360+360)%360;$('dq').textContent='The compass reads '+pad(g)+'\u00B0. Declination is '+d+'\u00B0 '+(e?'east':'west')+'. What is the map azimuth?';}}
- else{q.ans=rnd(0,359);$('dq').textContent='Turn to '+pad(q.ans)+'\u00B0. Use the Practice slider, then tap Check.';}
- DR.q=q;}
+function rf(a,b){return a+Math.random()*(b-a);}
+var U=34,SN=Math.PI/180;
+function gx(x){return x*U;}function gy(y){return 340-y*U;}
+function azOf(p,q){return (Math.atan2(q[0]-p[0],q[1]-p[1])/SN+360)%360;}
+function dv(a){return [Math.sin(a*SN),Math.cos(a*SN)];}
+function cr(a,b){return a[0]*b[1]-a[1]*b[0];}
+function inter(p,a1,q,a2){var d1=dv(a1),d2=dv(a2),c=cr(d1,d2);if(Math.abs(c)<0.2)return null;var t=cr([q[0]-p[0],q[1]-p[1]],d2)/c;return [p[0]+t*d1[0],p[1]+t*d1[1]];}
+function dist(p,q){return Math.hypot(p[0]-q[0],p[1]-q[1]);}
+function adiff(a,b){return Math.abs(((a-b+540)%360)-180);}
+function inG(p,m){return p[0]>=m&&p[0]<=10-m&&p[1]>=m&&p[1]<=10-m;}
+function fx(n){return n.toFixed(1);}
+function plBase(){var o='<g stroke="var(--line)" stroke-width="1">';for(var i=0;i<=10;i++){o+='<line x1="'+gx(i)+'" y1="0" x2="'+gx(i)+'" y2="340"/><line x1="0" y1="'+gy(i)+'" x2="340" y2="'+gy(i)+'"/>';}o+='</g><g font-size="9" style="fill:var(--mut)">';for(var k=2;k<=8;k+=2){o+='<text x="'+(gx(k)+2)+'" y="336">'+k+'</text><text x="2" y="'+(gy(k)-2)+'">'+k+'</text>';}o+='</g><g stroke="var(--fg)" opacity=".5"><line x1="326" y1="30" x2="326" y2="10" stroke-width="2"/></g><text x="326" y="8" text-anchor="middle" font-size="10" font-weight="700" style="fill:var(--fg)">N</text>';return o;}
+function plPt(p,l,c){return '<circle cx="'+gx(p[0]).toFixed(1)+'" cy="'+gy(p[1]).toFixed(1)+'" r="6" fill="'+(c||'var(--fg)')+'"/><text x="'+(gx(p[0])+9).toFixed(1)+'" y="'+(gy(p[1])+4).toFixed(1)+'" font-size="13" font-weight="700" style="fill:var(--fg)">'+l+'</text>';}
+function plLine(p,a,len,st){var d=dv(a),q=[p[0]+d[0]*len,p[1]+d[1]*len];return '<line x1="'+gx(p[0]).toFixed(1)+'" y1="'+gy(p[1]).toFixed(1)+'" x2="'+gx(q[0]).toFixed(1)+'" y2="'+gy(q[1]).toFixed(1)+'" '+st+'/>';}
+function plDraw(){var q=DR.q,o=plBase();
+ if(DR.m===4){o+=plPt(q.A,'A')+plPt(q.B,'B');}
+ else if(DR.m===5){q.L.forEach(function(l,i){o+=plPt(l,'ABC'[i]);});}
+ else if(DR.m===6){o+=plLine(q.R0,q.ra,16,'stroke="var(--fg)" stroke-width="7" opacity=".28" stroke-linecap="round"')+plPt(q.L,'L');}
+ if(DR.done){
+  if(DR.m===4){o+=plLine(q.A,q.aA,16,'stroke="var(--ok)" stroke-width="2" stroke-dasharray="5 3"')+plLine(q.B,q.aB,16,'stroke="var(--ok)" stroke-width="2" stroke-dasharray="5 3"');}
+  else if(DR.m===5){q.L.forEach(function(l,i){o+=plLine(l,(q.g[i]+180)%360,16,'stroke="var(--ok)" stroke-width="2" stroke-dasharray="5 3"');});}
+  else if(DR.m===6){o+=plLine(q.L,(q.g+180)%360,16,'stroke="var(--ok)" stroke-width="2" stroke-dasharray="5 3"');}
+  o+='<circle cx="'+gx(q.ans[0]).toFixed(1)+'" cy="'+gy(q.ans[1]).toFixed(1)+'" r="8" fill="none" stroke="var(--ok)" stroke-width="3"/>';}
+ if(DR.tap)o+='<g stroke="var(--bd)" stroke-width="3" stroke-linecap="round"><line x1="'+(gx(DR.tap[0])-7)+'" y1="'+(gy(DR.tap[1])-7)+'" x2="'+(gx(DR.tap[0])+7)+'" y2="'+(gy(DR.tap[1])+7)+'"/><line x1="'+(gx(DR.tap[0])-7)+'" y1="'+(gy(DR.tap[1])+7)+'" x2="'+(gx(DR.tap[0])+7)+'" y2="'+(gy(DR.tap[1])-7)+'"/></g>';
+ $('pls').innerHTML=o;}
+function nsDraw(q){var o='',cx=170,cy=104,ex=q.east?1:-1,ang=ex*Math.min(q.d*2.2,45);
+ o+='<g transform="translate('+cx+','+cy+')"><line x1="0" y1="0" x2="0" y2="-86" style="stroke:var(--fg)" stroke-width="3"/><path d="M0 -92 L6 -78 L-6 -78 Z" style="fill:var(--fg)"/><text x="-8" y="-96" text-anchor="end" font-size="13" font-weight="700" style="fill:var(--fg)">Grid N</text>';
+ o+='<g transform="rotate('+ang+')"><line x1="0" y1="0" x2="0" y2="-86" style="stroke:var(--needle)" stroke-width="3"/><path d="M0 -92 L6 -78 L-6 -78 Z" style="fill:var(--needle)"/><text x="'+(ex>0?8:-8)+'" y="-96" text-anchor="'+(ex>0?'start':'end')+'" font-size="13" font-weight="700" style="fill:var(--needle)">Mag N</text></g></g>';
+ $('pls').setAttribute('viewBox','0 0 340 120');$('pls').innerHTML=o;}
+function drNew(){var m=DR.m,q={};DR.tap=null;DR.done=0;$('df').textContent='';$('df').style.color='';$('da').value='';$('plh').textContent='';
+ var plot=m>=4,num=(m===0||m===1||m===3);$('dar').style.display=num?'':'none';$('plw').hidden=!(plot||m===3);$('pls').setAttribute('viewBox','0 0 340 340');
+ if(m===0){q.ans=(rnd(1,359)+180)%360;q.a=(q.ans+180)%360;$('dq').textContent='Your azimuth is '+pad(q.a)+'°. What is the back azimuth?';}
+ else if(m===1||m===3){var e=Math.random()<.5,d=rnd(5,15),g=rnd(10,350),toMag=Math.random()<.5;q.d=d;q.east=e;
+  if(toMag){q.ans=((e?g-d:g+d)%360+360)%360;$('dq').textContent=(m===3?'Magnetic north is '+(e?'RIGHT':'LEFT')+' of grid north by '+d+'°. ':'Declination is '+d+'° '+(e?'east':'west')+'. ')+'The map azimuth is '+pad(g)+'°. What does the compass read?';}
+  else{q.ans=((e?g+d:g-d)%360+360)%360;$('dq').textContent=(m===3?'Magnetic north is '+(e?'RIGHT':'LEFT')+' of grid north by '+d+'°. ':'Declination is '+d+'° '+(e?'east':'west')+'. ')+'The compass reads '+pad(g)+'°. What is the map azimuth?';}
+  q.toMag=toMag;if(m===3)nsDraw(q);}
+ else if(m===2){q.ans=rnd(0,359);$('dq').textContent='Turn to '+pad(q.ans)+'°. Use the Practice slider, then tap Check.';}
+ else if(m===4){var A,B,T,aA,aB,n=0;do{A=[rf(1,9),rf(1,9)];B=[rf(1,9),rf(1,9)];T=[rf(2,8),rf(2,8)];aA=Math.round(azOf(A,T))%360;aB=Math.round(azOf(B,T))%360;n++;}while(n<500&&!(dist(A,B)>=3&&dist(A,T)>=2.5&&dist(B,T)>=2.5&&adiff(aA,aB)>=40&&adiff(aA,aB)<=140));
+  q.A=A;q.B=B;q.aA=aA;q.aB=aB;q.ans=inter(A,aA,B,aB)||T;q.tol=0.7;$('dq').textContent='From A the target is at azimuth '+pad(aA)+'°. From B it is '+pad(aB)+'°. Tap the target.';$('plh').textContent='Draw each azimuth from its point (north is up). The target is where they cross.';}
+ else if(m===5){var P,L,g,n2=0,e2=Math.random()<.5,d2=rnd(5,15);do{P=[rf(3,7),rf(3,7)];L=[];g=[];for(var i=0;i<3;i++){var az=rf(0,360),r=rf(2.5,5),pp=[P[0]+Math.sin(az*SN)*r,P[1]+Math.cos(az*SN)*r];L.push(pp);g.push(Math.round(azOf(P,pp))%360);}n2++;}while(n2<800&&!(L.every(function(p){return inG(p,0.5);})&&adiff(g[0],g[1])>=45&&adiff(g[1],g[2])>=45&&adiff(g[0],g[2])>=45));
+  q.L=L;q.g=g;q.ans=P;q.d=d2;q.east=e2;q.tol=0.8;q.mag=g.map(function(x){return ((e2?x-d2:x+d2)%360+360)%360;});
+  $('dq').textContent='Declination is '+d2+'° '+(e2?'east':'west')+'. Compass azimuths from you to the landmarks: A '+pad(q.mag[0])+'°, B '+pad(q.mag[1])+'°, C '+pad(q.mag[2])+'°. Tap where you are.';$('plh').textContent='Convert to map azimuths, add or subtract 180 for the back azimuth, and draw from each landmark. You are where the lines cross.';}
+ else{var R0,ra,P2,L2,g2,n3=0,e3=Math.random()<.5,d3=rnd(5,15);do{R0=[0,rf(2,8)];var R1=[10,rf(2,8)];ra=azOf(R0,R1);var tt=rf(0.2,0.8);P2=[R0[0]+(R1[0]-R0[0])*tt,R0[1]+(R1[1]-R0[1])*tt];var az3=rf(0,360),r3=rf(3,6);L2=[P2[0]+Math.sin(az3*SN)*r3,P2[1]+Math.cos(az3*SN)*r3];g2=Math.round(azOf(P2,L2))%360;n3++;}while(n3<800&&!(inG(L2,0.5)&&Math.min(adiff(g2,ra),adiff(g2,(ra+180)%360))>=35));
+  q.R0=R0;q.ra=ra;q.L=L2;q.g=g2;q.ans=P2;q.d=d3;q.east=e3;q.tol=0.8;q.mag=((e3?g2-d3:g2+d3)%360+360)%360;
+  $('dq').textContent='You are on the road (the thick line). Declination is '+d3+'° '+(e3?'east':'west')+'. The compass azimuth from you to the tower L is '+pad(q.mag)+'°. Tap where you are.';$('plh').textContent='Back azimuth from L, in map terms, meets the road at your spot.';}
+ DR.q=q;if(plot)plDraw();}
+$('pls').addEventListener('click',function(e){if(DR.m<4||DR.done)return;var r=this.getBoundingClientRect();DR.tap=[(e.clientX-r.left)/r.width*10,10-(e.clientY-r.top)/r.height*10];plDraw();});
 function drCheck(){var q=DR.q,f=$('df'),ok=false;if(!q)return;
  if(DR.m===2){if(!demo){$('prac').click();f.textContent='Practice mode is on. Use the slider, then tap Check.';f.style.color='';return;}
-  var h=curH(),dd=Math.abs(((h-q.ans+540)%360)-180);ok=dd<=3;DR.t++;if(ok)DR.r++;f.textContent=ok?'Right. You are on '+pad(q.ans)+'\u00B0.':'You are '+Math.round(dd)+'\u00B0 off. Keep turning.';}
+  var h=curH(),dd=adiff(h,q.ans);ok=dd<=3;DR.t++;if(ok)DR.r++;f.textContent=ok?'Right. You are on '+pad(q.ans)+'°.':'You are '+Math.round(dd)+'° off. Keep turning.';}
+ else if(DR.m>=4){if(!DR.tap){f.textContent='Tap the map first.';f.style.color='';return;}if(DR.done)return;
+  var dd2=dist(DR.tap,q.ans);ok=dd2<=q.tol;DR.t++;if(ok)DR.r++;DR.done=1;var hint='';
+  if(!ok&&DR.m===5){var w=inter(q.L[0],q.mag[0],q.L[1],q.mag[1]);if(w&&dist(DR.tap,w)<1.2)hint=' Looks like you forgot to apply the declination.';}
+  if(!ok&&DR.m===6){var w2=inter(q.L,(q.mag+180)%360,q.R0,q.ra);if(w2&&dist(DR.tap,w2)<1.2)hint=' Looks like you forgot to apply the declination.';}
+  f.textContent=ok?'Right. Within '+fx(dd2)+' squares.':'About '+fx(dd2)+' squares off. The green ring is the answer.'+hint;plDraw();}
  else{var v=parseInt($('da').value,10);if(!isFinite(v)){f.textContent='Type a number first.';f.style.color='';return;}
-  ok=(((v%360)+360)%360)===q.ans;DR.t++;if(ok)DR.r++;f.textContent=ok?'Right.':'Not quite. The answer is '+pad(q.ans)+'\u00B0.';}
+  ok=(((v%360)+360)%360)===q.ans;DR.t++;if(ok)DR.r++;f.textContent=ok?'Right.':'Not quite. The answer is '+pad(q.ans)+'°.'+(DR.m===3?' Left add, right subtract: map to compass. Compass to map: the reverse.':'');}
  f.style.color=ok?'var(--ok)':'var(--bd)';$('dsc').textContent='Right: '+DR.r+' of '+DR.t;}
-document.querySelectorAll('#drm button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
-$('dck').onclick=drCheck;$('dnx').onclick=drNew;drNew();
+document.querySelectorAll('#drm button,#drp button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
+$('dck').onclick=drCheck;$('dnx').onclick=drNew;drNew();window.cpTest={DR:DR,azOf:azOf,adiff:adiff,drNew:drNew};
 nightUI();refUI();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
 })();
