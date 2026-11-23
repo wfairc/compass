@@ -126,7 +126,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <details><summary>4. Using the lensatic compass</summary>
 <p><b>Center-hold:</b> open the compass, thumb through the loop, elbows tucked at your sides, the compass in the middle of your chest. Turn your whole body, not your wrists. This is quick and good for walking an azimuth.</p>
 <p><b>Compass-to-cheek:</b> hold the compass up to your cheek, sight along the wire and the slot at the target, and read the card through the lens. This is slower and more accurate, and it is how you shoot an azimuth to a landmark.</p>
-<p>Keep the compass away from vehicles, power lines, steel and weapons. They pull the needle. Rough safe gaps from the Army manual: power lines 55 m, vehicles 18 m, barbed wire 10 m (check before relying on them).</p></details>
+<p>Keep the compass away from vehicles, power lines, steel and weapons. They pull the needle. Rough safe gaps from the Army manual: power lines 55 m, vehicles 18 m, barbed wire 10 m (check before relying on them).</p><div class="row"><button type="button" class="pr" data-p="shoot">Practice this</button></div></details>
 <details><summary>5. Intersection: find a point you can see</summary>
 <p>Use this to locate something you can see but cannot reach, such as a tower or a smoke plume.</p>
 <ol><li>From where you stand, shoot an azimuth to the target and convert it to a grid azimuth.</li><li>Plot the line on the map from your known spot.</li><li>Move to a second known spot and repeat.</li><li>The target is where the lines cross. A third line checks it.</li></ol><div class="row"><button type="button" class="pr" data-p="inter">Practice this</button></div></details>
@@ -142,7 +142,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <details><summary>9. Pace count and dead reckoning</summary>
 <p><b>Pace count.</b> Count each time the same foot lands (a double pace). Walk a known 100 m on flat ground and count: most people land around 60 to 70. Your own number is the one that matters.</p>
 <p>You take more paces uphill, in sand or mud, at night, with a pack or tired. Fewer downhill. Keep tally with knots in a cord or beads, one per 100 m.</p>
-<p><b>Dead reckoning</b> is navigating by azimuth and distance alone. Break the trip into legs. Each leg is one azimuth and one distance. Walk the azimuth, count the paces, and at the end of each leg stop, check, and start the next.</p></details>
+<p><b>Dead reckoning</b> is navigating by azimuth and distance alone. Break the trip into legs. Each leg is one azimuth and one distance. Walk the azimuth, count the paces, and at the end of each leg stop, check, and start the next.</p><div class="row"><button type="button" class="pr" data-p="pace">Practice this</button></div></details>
 <details><summary>10. Terrain association and route planning</summary>
 <p>Terrain association means matching the ground to the map as you go, not just following a number.</p>
 <ol><li><b>Orient the map</b> to north and find where you are.</li><li><b>Plan in legs</b> between checkpoints you can recognize.</li><li><b>Handrails:</b> a long feature running your way, like a ridge, road or stream, that keeps you on track.</li><li><b>Catching features:</b> a feature past your target that says you overshot, such as a road or a river.</li><li><b>Attack point:</b> an easy-to-find feature near a hard-to-find target. Navigate to it, then take a short, careful leg in.</li><li><b>Aiming off:</b> aim deliberately to one side of a linear target so you know which way to turn when you reach it.</li><li><b>Steering marks:</b> pick a far object on your azimuth, walk to it, then pick the next. This is faster than staring at the compass.</li></ol>
@@ -155,12 +155,12 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <div class="seg" id="dmode" role="group" aria-label="Mode"><button type="button" data-m="d" class="on">Drills</button><button type="button" data-m="t">Test</button></div>
 <div id="dsel"><p class="note" style="margin:8px 0 2px">Numbers</p><div class="seg" id="drm" role="group" aria-label="Number drills"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="3">Which north</button><button type="button" data-d="2">Aim</button></div>
 <p class="note" style="margin:8px 0 2px">Map</p><div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button><button type="button" data-d="7">Polar</button></div>
-<p class="note" style="margin:8px 0 2px">Ground</p><div class="seg" id="drg" role="group" aria-label="Ground drills"><button type="button" data-d="8">Contours</button><button type="button" data-d="9">Route</button></div></div>
+<p class="note" style="margin:8px 0 2px">Ground</p><div class="seg" id="drg" role="group" aria-label="Ground drills"><button type="button" data-d="8">Contours</button><button type="button" data-d="9">Route</button><button type="button" data-d="10">Shoot</button><button type="button" data-d="11">Pace</button></div></div>
 <div id="tst" style="display:none"><p class="note" id="tinfo"></p><div class="row"><button type="button" id="tgo">Start test</button></div></div>
 <p class="note" id="tcnt" style="display:none;margin:8px 0 0"></p>
 <div id="qbox"><p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div><div class="seg" id="dch" style="display:none"></div><div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
 <div class="row" id="drow"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
-<p id="df" style="min-height:24px;font-weight:600"></p></div>
+<p id="df" style="min-height:24px;font-weight:600"></p><p class="note" id="prcp" style="display:none"><a href="#" id="prc">Set my pace again</a></p></div>
 <p class="note" id="dsc"></p><div id="tres" style="display:none"></div>
 <p class="note" id="drrp"><a href="#" id="drr">Reset progress</a></p></details>
 <details><summary>Why the reading drifts</summary><p>Hold the phone flat, away from metal, phone cases with magnets, laptops and cars. If the badge says poor, move the phone in a figure 8 a few times to recalibrate. Tilt matters too: the heading is best when the phone is flat. For altitude angle, hold it upright, back toward the target.</p></details>
@@ -412,8 +412,25 @@ var DRILLS=[
  draw:function(q){return plPt(q.S,'S');},
  sol:function(q){return plLine(q.S,q.az,q.d,DS);}},
 {id:'contour',name:'Contours',topic:'ground',kind:'tap',pw:1,gen:genCon,draw:function(q){var o=terSvg(q.T);q.mk.forEach(function(m){o+=plPt(m[0],m[1]);});return o;},sol:function(q){return '';}},
-{id:'route',name:'Route',topic:'ground',kind:'tap',pw:1,gen:genRoute,draw:routeDraw,sol:function(q){return '';}}
+{id:'route',name:'Route',topic:'ground',kind:'tap',pw:1,gen:genRoute,draw:routeDraw,sol:function(q){return '';}},
+{id:'shoot',name:'Shoot',topic:'ground',kind:'sensor',ni:1,
+ gen:function(q){q.t=rnd(0,359);q.ph=0;q.nn=1;q.ans=(q.t+180)%360;$('dq').textContent='Face azimuth '+pad(q.t)+'°. The dial is hidden. Turn, then tap Check.';vs(1);},
+ check:function(q,f){if(q.ph===0){var h=curH();if(h===null){$('prac').click();f.textContent='Practice mode is on. Use the slider, then tap Check.';f.style.color='';return null;}
+   q.err=adiff(h,q.t);q.ph=1;vs(0);$('dar').style.display='';$('dq').textContent='You faced '+pad(h)+'°, '+Math.round(q.err)+'° off. Now: what is the back azimuth of '+pad(q.t)+'°?';f.textContent='';return null;}
+  if(DR.done)return null;var v=parseInt($('da').value,10);if(!isFinite(v)){f.textContent='Type a number first.';f.style.color='';return null;}
+  v=((v%360)+360)%360;DR.done=1;var ok=q.err<=10&&v===q.ans;f.textContent=ok?'Right. Within 10° and the back azimuth is '+pad(q.ans)+'°.':(q.err>10?'Facing: '+Math.round(q.err)+'° off. Aim for 10° or less. ':'')+(v!==q.ans?'The back azimuth is '+pad(q.ans)+'°.':'');return ok;}},
+{id:'pace',name:'Pace',topic:'ground',kind:'sensor',ni:1,
+ gen:function(q){var pc=PC||parseInt(ld('cpPace','0'),10);
+  if(!(pc>=40&&pc<=90)){q.cal=1;$('dq').textContent='Set your pace first. Walk 100 m on flat ground and count every time your left foot lands. Type the count.';$('plh').textContent='Most people count 55 to 70 paces per 100 m.';return;}
+  var dm=rnd(2,12)*50,fs=['uphill','over sand','at night','with a heavy pack'].filter(function(){return Math.random()<.4;});
+  q.pc=pc;q.dm=dm;q.fs=fs;q.base=Math.round(dm/100*pc);q.ans=Math.round(dm/100*pc*Math.pow(1.1,fs.length));
+  $('dq').textContent=dm+' m'+(fs.length?', '+fs.join(', '):'')+'. How many paces?';$('plh').textContent='Your pace is '+pc+' per 100 m.';$('prcp').style.display='';},
+ check:function(q,f){var v=parseInt($('da').value,10);if(!isFinite(v)){f.textContent='Type a number first.';f.style.color='';return null;}
+  if(q.cal){if(v<40||v>90){f.textContent='That is outside 40 to 90. Count again.';f.style.color='';return null;}PC=v;sv('cpPace',String(v));f.textContent='Saved: '+v+' paces per 100 m. Tap Next for a drill.';f.style.color='';return null;}
+  var ok=Math.abs(v-q.ans)<=Math.max(1,q.ans*.05);f.textContent=(ok?'Right. ':'Not quite. About '+q.ans+' paces. ')+q.dm+' m at '+q.pc+' per 100 m is '+q.base+'.'+(q.fs.length?' Add 10% for each of: '+q.fs.join(', ')+'. Each one shortens your pace, so you need more paces.':' No extra factors.');return ok;}}
 ];
+var PC=0;
+function vs(h){['dial','hd','demov'].forEach(function(id){$(id).style.visibility=h?'hidden':'';});}
 var PG={};try{PG=JSON.parse(ld('cpProg','{}'))||{};}catch(e){PG={};}
 function drSc(){var d=DRILLS[DR.m],p=PG[d.id],o=DR.t?'Right: '+DR.r+' of '+DR.t:'';if(p&&p[1])o+=(o?' ':'')+(DR.t?'(all time ':'All time ')+Math.round(p[0]/p[1]*100)+'%'+(DR.t?')':'');$('dsc').textContent=o;}
 function pgAdd(id,ok){var p=PG[id]||[0,0];p=[p[0]+(ok?1:0),p[1]+1];if(p[1]>999)p=[Math.round(p[0]*500/p[1]),500];PG[id]=p;sv('cpProg',JSON.stringify(PG));}
@@ -432,9 +449,9 @@ function nsDraw(q){var o='',cx=170,cy=104,ex=q.east?1:-1,ang=ex*Math.min(q.d*2.2
  o+='<g transform="translate('+cx+','+cy+')"><line x1="0" y1="0" x2="0" y2="-86" style="stroke:var(--fg)" stroke-width="3"/><path d="M0 -92 L6 -78 L-6 -78 Z" style="fill:var(--fg)"/><text x="-8" y="-96" text-anchor="end" font-size="13" font-weight="700" style="fill:var(--fg)">Grid N</text>';
  o+='<g transform="rotate('+ang+')"><line x1="0" y1="0" x2="0" y2="-86" style="stroke:var(--needle)" stroke-width="3"/><path d="M0 -92 L6 -78 L-6 -78 Z" style="fill:var(--needle)"/><text x="'+(ex>0?8:-8)+'" y="-96" text-anchor="'+(ex>0?'start':'end')+'" font-size="13" font-weight="700" style="fill:var(--needle)">Mag N</text></g></g>';
  $('pls').setAttribute('viewBox','0 0 340 120');$('pls').innerHTML=o;}
-function drNew(){var m=DR.m,d=DRILLS[m],q={};DR.tap=null;DR.ch=null;DR.done=0;$('df').textContent='';$('df').style.color='';$('da').value='';$('plh').textContent='';
+function drNew(){var m=DR.m,d=DRILLS[m],q={};DR.tap=null;DR.ch=null;DR.done=0;vs(0);$('prcp').style.display='none';$('df').textContent='';$('df').style.color='';$('da').value='';$('plh').textContent='';
  $('pls').setAttribute('viewBox','0 0 340 340');d.gen(q);DR.q=q;var k=kd();
- $('dar').style.display=k==='num'?'':'none';$('plw').hidden=!d.pw;$('dch').style.display=k==='choice'?'':'none';$('dch').innerHTML=k==='choice'?q.opts.map(function(o){return '<button type="button" data-v="'+o+'">'+o+'</button>';}).join(''):'';
+ $('dar').style.display=k==='num'||(d.ni&&!q.nn)?'':'none';$('plw').hidden=!d.pw;$('dch').style.display=k==='choice'?'':'none';$('dch').innerHTML=k==='choice'?q.opts.map(function(o){return '<button type="button" data-v="'+o+'">'+o+'</button>';}).join(''):'';
  if(d.draw)plDraw();drSc();}
 $('dch').onclick=function(e){var b=e.target;if(b.tagName!=='BUTTON'||DR.done)return;DR.ch=b.dataset.v;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});};
 $('pls').addEventListener('click',function(e){if(kd()!=='tap'||DR.done)return;var r=this.getBoundingClientRect();DR.tap=[(e.clientX-r.left)/r.width*10,10-(e.clientY-r.top)/r.height*10];plDraw();});
@@ -442,6 +459,7 @@ function drCheck(){var q=DR.q,f=$('df'),d=DRILLS[DR.m],ok;if(!q)return;
  var k=kd();ok=d.check?d.check(q,f):k==='tap'?tapCheck(q,f,d):k==='choice'?chCheck(q,f):numCheck(q,f,d);if(ok===null)return;DR.t++;if(ok)DR.r++;
  pgAdd(d.id,ok);
  f.style.color=ok?'var(--ok)':'var(--bd)';drSc();}
+$('prc').onclick=function(e){e.preventDefault();PC=0;try{localStorage.removeItem('cpPace');}catch(x){}drNew();};
 $('drr').onclick=function(e){e.preventDefault();if(!confirm('Clear all practice and test progress?'))return;PG={};DR.r=0;DR.t=0;try{localStorage.removeItem('cpProg');localStorage.removeItem('cpTest');}catch(x){}drSc();if($('tst').style.display!=='none')tsInfo();};
 document.querySelectorAll('#drm button,#drp button,#drg button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button,#drp button,#drg button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
 function openDrill(id){setMode('d');var i=DRILLS.findIndex(function(x){return x.id===id;});if(i<0)return;DR.m=i;document.querySelectorAll('#drm button,#drp button,#drg button').forEach(function(x){x.classList.toggle('on',+x.dataset.d===i);});drNew();$('drl').open=true;$('drl').scrollIntoView();}
@@ -450,7 +468,7 @@ var TS={on:0,i:0,l:[],res:[]},TOP={num:0,map:1,ground:2};
 function g(id,s){$(id).style.display=s?'':'none';}
 function view(v){var d=v==='d',q=v==='q',i=v==='i',r=v==='r';g('dsel',d);g('qbox',d||q);g('dnx',d);g('dsc',d);g('tst',i);g('tcnt',q);g('tres',r);g('drrp',!q);$('dck').textContent=d?'Check':'Next';}
 function tsInfo(){var T={};try{T=JSON.parse(ld('cpTest','{}'))||{};}catch(e){}$('tinfo').textContent='10 questions. No hints, and no answers until the end.'+(T.count?' Best '+T.best+' of 10. Last '+T.last+' of 10. Taken '+T.count+(T.count>1?' times.':' time.'):'');}
-function setMode(m){TS.on=0;document.querySelectorAll('#dmode button').forEach(function(b){b.classList.toggle('on',b.dataset.m===m);});if(m==='d'){view('d');drNew();}else{view('i');tsInfo();}}
+function setMode(m){TS.on=0;vs(0);document.querySelectorAll('#dmode button').forEach(function(b){b.classList.toggle('on',b.dataset.m===m);});if(m==='d'){view('d');drNew();}else{view('i');tsInfo();}}
 function tsList(){var el=[];DRILLS.forEach(function(d,k){if(d.kind!=='sensor')el.push(k);});var l=el.slice();while(l.length<10)l.push(el[Math.floor(Math.random()*el.length)]);l=l.slice(0,10);return l.sort(function(a,b){return TOP[DRILLS[a].topic]-TOP[DRILLS[b].topic]||a-b;});}
 function tsQ(){DR.m=TS.l[TS.i];drNew();$('plh').textContent='';$('df').textContent='';$('tcnt').textContent='Question '+(TS.i+1)+' of 10';$('dck').textContent=TS.i===9?'Finish':'Next';}
 function tsStart(){TS.on=1;TS.i=0;TS.res=[];TS.l=tsList();view('q');tsQ();}
