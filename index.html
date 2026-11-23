@@ -116,7 +116,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div>
 <div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
 <div class="row"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
-<p id="df" style="min-height:24px;font-weight:600"></p><p class="note" id="dsc"></p></details>
+<p id="df" style="min-height:24px;font-weight:600"></p><p class="note" id="dsc"></p><p class="note"><a href="#" id="drr">Reset progress</a></p></details>
 <h1 style="margin-top:18px;font-size:18px">Land navigation course</h1>
 <p class="note" style="margin-top:0">A plain-language summary of the standard methods taught in military land navigation courses, written from general knowledge. It is not the official manual and not a replacement for training or practice on the ground.</p>
 <details><summary>1. Reading the map: grids, scale, contours</summary>
@@ -332,6 +332,8 @@ var DRILLS=[
  sol:function(q){return plLine(q.L,(q.g+180)%360,16,DS);},
  hint:function(q,t){var w=inter(q.L,(q.mag+180)%360,q.R0,q.ra);return w&&dist(t,w)<1.2?DECL:'';}}
 ];
+var PG={};try{PG=JSON.parse(ld('cpProg','{}'))||{};}catch(e){PG={};}
+function drSc(){var d=DRILLS[DR.m],p=PG[d.id],o=DR.t?'Right: '+DR.r+' of '+DR.t:'';if(p&&p[1])o+=(o?' ':'')+(DR.t?'(all time ':'All time ')+Math.round(p[0]/p[1]*100)+'%'+(DR.t?')':'');$('dsc').textContent=o;}
 function tapCheck(q,f,d){if(!DR.tap){f.textContent='Tap the map first.';f.style.color='';return null;}if(DR.done)return null;
  var dd=dist(DR.tap,q.ans),ok=dd<=q.tol;DR.done=1;
  f.textContent=ok?'Right. Within '+fx(dd)+' squares.':'About '+fx(dd)+' squares off. The green ring is the answer.'+(d.hint?d.hint(q,DR.tap):'');plDraw();return ok;}
@@ -347,11 +349,13 @@ function nsDraw(q){var o='',cx=170,cy=104,ex=q.east?1:-1,ang=ex*Math.min(q.d*2.2
  $('pls').setAttribute('viewBox','0 0 340 120');$('pls').innerHTML=o;}
 function drNew(){var m=DR.m,d=DRILLS[m],q={};DR.tap=null;DR.done=0;$('df').textContent='';$('df').style.color='';$('da').value='';$('plh').textContent='';
  $('dar').style.display=d.kind==='num'?'':'none';$('plw').hidden=!d.pw;$('pls').setAttribute('viewBox','0 0 340 340');
- d.gen(q);DR.q=q;if(d.kind==='tap')plDraw();}
+ d.gen(q);DR.q=q;if(d.kind==='tap')plDraw();drSc();}
 $('pls').addEventListener('click',function(e){if(DRILLS[DR.m].kind!=='tap'||DR.done)return;var r=this.getBoundingClientRect();DR.tap=[(e.clientX-r.left)/r.width*10,10-(e.clientY-r.top)/r.height*10];plDraw();});
 function drCheck(){var q=DR.q,f=$('df'),d=DRILLS[DR.m],ok;if(!q)return;
  ok=d.check?d.check(q,f):d.kind==='tap'?tapCheck(q,f,d):numCheck(q,f,d);if(ok===null)return;DR.t++;if(ok)DR.r++;
- f.style.color=ok?'var(--ok)':'var(--bd)';$('dsc').textContent='Right: '+DR.r+' of '+DR.t;}
+ var p=PG[d.id]||[0,0];p=[p[0]+(ok?1:0),p[1]+1];if(p[1]>999){p=[Math.round(p[0]*500/p[1]),500];}PG[d.id]=p;sv('cpProg',JSON.stringify(PG));
+ f.style.color=ok?'var(--ok)':'var(--bd)';drSc();}
+$('drr').onclick=function(e){e.preventDefault();if(!confirm('Clear all practice and test progress?'))return;PG={};DR.r=0;DR.t=0;try{localStorage.removeItem('cpProg');localStorage.removeItem('cpTest');}catch(x){}drSc();};
 document.querySelectorAll('#drm button,#drp button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
 $('dck').onclick=drCheck;$('dnx').onclick=drNew;drNew();window.cpTest={DR:DR,azOf:azOf,adiff:adiff,drNew:drNew};
 nightUI();refUI();
