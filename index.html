@@ -62,15 +62,15 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
   <text x="82" y="6" text-anchor="middle" font-size="16" fill="currentColor">E</text>
   <text y="92" text-anchor="middle" font-size="16" fill="currentColor">S</text>
   <text x="-82" y="6" text-anchor="middle" font-size="16" fill="currentColor">W</text></g>
-  <path d="M0 -108 L8 -94 L-8 -94 Z" style="fill:var(--needle)"/><line x1="0" y1="-94" x2="0" y2="-40" style="stroke:var(--needle)" stroke-width="3"/><circle r="3" fill="currentColor"/></g>
+  <path d="M0 -99 L8 -85 L-8 -85 Z" style="fill:var(--needle)"/><line x1="0" y1="-85" x2="0" y2="-40" style="stroke:var(--needle)" stroke-width="3"/><circle r="3" fill="currentColor"/></g>
  <g id="gMarine" hidden><circle r="100" fill="none" stroke="currentColor" stroke-width="2" opacity=".5"/><g id="mCard"></g>
-  <path d="M0 -104 L7 -90 L-7 -90 Z" style="fill:var(--needle)"/><line x1="0" y1="-90" x2="0" y2="-62" style="stroke:var(--needle)" stroke-width="3"/>
+  <path d="M0 -99 L7 -87 L-7 -87 Z" style="fill:var(--needle)"/><line x1="0" y1="-87" x2="0" y2="-62" style="stroke:var(--needle)" stroke-width="3"/>
   <path d="M0 -26 L12 18 L0 10 L-12 18 Z" fill="currentColor" opacity=".8"/></g>
  <g id="gBase" hidden><g id="bRing"></g>
-  <g id="bNeedle"><path d="M0 -60 L7 0 L-7 0 Z" style="fill:var(--needle)"/><path d="M0 60 L7 0 L-7 0 Z" fill="#f1efe8" stroke="#888" stroke-width=".5"/></g><circle r="3" fill="#888"/>
-  <path d="M0 -109 L8 -97 L-8 -97 Z" fill="currentColor"/></g>
+  <g id="bNeedle"><path d="M0 -50 L5.5 0 L-5.5 0 Z" style="fill:var(--needle)"/><path d="M0 50 L5.5 0 L-5.5 0 Z" fill="#f1efe8" stroke="#888" stroke-width=".5"/></g><circle r="3" fill="#888"/>
+  <path d="M0 -108 L7 -99 L-7 -99 Z" fill="currentColor"/></g>
  <g id="gLens" hidden><g id="lCard"></g>
-  <line x1="0" y1="-102" x2="0" y2="-20" style="stroke:var(--needle)" stroke-width="1.5"/><path d="M0 -106 L5 -98 L-5 -98 Z" style="fill:var(--needle)"/><circle r="3" fill="currentColor"/></g>
+  <line x1="0" y1="-102" x2="0" y2="-20" style="stroke:var(--needle)" stroke-width="1.5"/><path d="M0 -100 L5 -92 L-5 -92 Z" style="fill:var(--needle)"/><circle r="3" fill="currentColor"/></g>
 </svg>
 <div id="hd">--</div><div id="hw">heading<span id="acc" hidden></span></div>
 <div id="win" hidden><span id="winl">Sight window</span><i></i><b id="winv">---</b></div>
@@ -135,9 +135,9 @@ function ring2(step,cls){var h='<circle r="100" class="'+cls+'"/><circle r="100"
  h+='</g>';var N={0:'N',90:'E',180:'S',270:'W'};
  for(var a2=0;a2<360;a2+=30){if(N[a2])h+='<text class="bzt" transform="rotate('+a2+') translate(0,-72)" text-anchor="middle" font-size="18" font-weight="700">'+N[a2]+'</text>';else h+='<text class="bzt" transform="rotate('+a2+') translate(0,-76)" text-anchor="middle" font-size="11">'+a2+'</text>';}
  return h;}
-function mk(){$('mCard').innerHTML=ring(5)+'<g id="flag" transform="rotate(0)"><path d="M0 -99 L7 -111 L-7 -111 Z" style="fill:var(--ok)"/></g>';
+function mk(){$('mCard').innerHTML=ring(5)+'<g id="flag" transform="rotate(0)"><path d="M0 -99 L7 -109 L-7 -109 Z" style="fill:var(--ok)"/></g>';
  var ol='';for(var x=-48;x<=48;x+=16)ol+='<line x1="'+x+'" y1="-60" x2="'+x+'" y2="60" class="bzl" stroke-width="1" opacity=".45"/>';
- $('bRing').innerHTML=ring2(2,'bz')+'<clipPath id="cap"><circle r="62"/></clipPath><g clip-path="url(#cap)">'+ol+'</g><circle r="64" fill="none" class="bzl" opacity=".5"/><g id="bShed"><path id="bArrow" d="M0 -64 L16 -44 L16 18 L-16 18 L-16 -44 Z" fill="rgba(210,60,40,.18)" class="bzl" stroke-width="3"/><text class="bzt" y="34" text-anchor="middle" font-size="10" font-weight="700">SHED</text></g>';
+ $('bRing').innerHTML=ring2(2,'bz')+'<clipPath id="cap"><circle r="62"/></clipPath><g clip-path="url(#cap)">'+ol+'</g><circle r="64" fill="none" class="bzl" opacity=".5"/><path id="bArrow" d="M0 -58 L15 -36 L8 -36 L8 48 L-8 48 L-8 -36 L-15 -36 Z" fill="rgba(232,116,44,.28)" stroke="#e8742c" stroke-width="2.4" stroke-linejoin="round"/>';
  $('lCard').innerHTML=ring(5)+'<circle cx="0" cy="-90" r="2.6" fill="currentColor" opacity=".8"/>';}
 var HOW={simple:['Simple compass','Read the heading',{
 f:['Hold the phone flat and still.','The dial turns so N always points to north. The red marker is the way the phone points.','Read the number under the dial. Use Lock to freeze it.'],
@@ -150,7 +150,7 @@ q:['Set the course.','Red line onto the green flag.','Hold it.'],
 m:['Make small corrections: big swings overshoot.','Once on course, steer by a far object on that line.'],
 x:['Convert true to magnetic with variation (declination). Deviation, the error from the boat\u2019s own metal, is not modelled here.','Course to steer is not course made good: wind or current sets you sideways.','Check the compass against the object now and then.']}],
 base:['Baseplate compass','Red in the shed',{
-f:['Set the Bearing. The ring turns to put that number at the top, in front of the travel arrow.','Hold the phone flat in front of you, travel arrow pointing away.','Turn your whole body until the red needle sits inside the house-shaped orienting arrow on the ring, the shed: red in the shed. (The dog in the doghouse.)','The travel arrow now points along your bearing. Pick a landmark on that line, walk to it, then repeat.'],
+f:['Set the Bearing. The ring turns to put that number at the top, in front of the travel arrow.','Hold the phone flat in front of you, travel arrow pointing away.','Turn your whole body until the red needle sits inside the orange orienting arrow on the ring, the shed: red in the shed. (The dog in the doghouse.)','The travel arrow now points along your bearing. Pick a landmark on that line, walk to it, then repeat.'],
 q:['Set the bearing.','Flat, travel arrow pointing away.','Red in the shed.','Walk to a landmark on the line, repeat.'],
 m:['From a map: lay the plate edge along A to B, turn the ring until the orienting lines match the map\u2019s north lines, read the bearing, then take off east declination to get magnetic.','Re-check the bearing on every leg.'],
 x:['Aim off: steer deliberately to one side of a line target (a road, a stream) so you know which way to turn when you hit it.','Use handrails (ridges, streams) and attack points. Count double paces: roughly 60 to 70 per 100 m, so measure your own.','Keep metal, phones and watches away from the needle, and re-sight after every obstacle.','Resection: sight two landmarks, add or subtract 180 for the back bearings, and draw them on the map. You are where they cross.']}],
