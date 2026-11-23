@@ -146,7 +146,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <details><summary>10. Terrain association and route planning</summary>
 <p>Terrain association means matching the ground to the map as you go, not just following a number.</p>
 <ol><li><b>Orient the map</b> to north and find where you are.</li><li><b>Plan in legs</b> between checkpoints you can recognize.</li><li><b>Handrails:</b> a long feature running your way, like a ridge, road or stream, that keeps you on track.</li><li><b>Catching features:</b> a feature past your target that says you overshot, such as a road or a river.</li><li><b>Attack point:</b> an easy-to-find feature near a hard-to-find target. Navigate to it, then take a short, careful leg in.</li><li><b>Aiming off:</b> aim deliberately to one side of a linear target so you know which way to turn when you reach it.</li><li><b>Steering marks:</b> pick a far object on your azimuth, walk to it, then pick the next. This is faster than staring at the compass.</li></ol>
-<p>Go around obstacles instead of through them. At a block, turn 90&deg; and count paces until clear, walk past on your azimuth, turn 90&deg; back the same count, then resume.</p></details>
+<p>Go around obstacles instead of through them. At a block, turn 90&deg; and count paces until clear, walk past on your azimuth, turn 90&deg; back the same count, then resume.</p><div class="row"><button type="button" class="pr" data-p="route">Practice this</button></div></details>
 <details><summary>11. Night and bad weather</summary>
 <p>Go slower and rely on pace count, handrails and catching features more than on seeing landmarks. Use a red light to read the map and compass, which keeps your night vision. Re-check your position more often. The luminous marks on a compass help you hold an azimuth, but they do not replace checking the map.</p></details>
 <details><summary>12. Common mistakes</summary>
@@ -155,7 +155,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <div class="seg" id="dmode" role="group" aria-label="Mode"><button type="button" data-m="d" class="on">Drills</button><button type="button" data-m="t">Test</button></div>
 <div id="dsel"><p class="note" style="margin:8px 0 2px">Numbers</p><div class="seg" id="drm" role="group" aria-label="Number drills"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="3">Which north</button><button type="button" data-d="2">Aim</button></div>
 <p class="note" style="margin:8px 0 2px">Map</p><div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button><button type="button" data-d="7">Polar</button></div>
-<p class="note" style="margin:8px 0 2px">Ground</p><div class="seg" id="drg" role="group" aria-label="Ground drills"><button type="button" data-d="8">Contours</button></div></div>
+<p class="note" style="margin:8px 0 2px">Ground</p><div class="seg" id="drg" role="group" aria-label="Ground drills"><button type="button" data-d="8">Contours</button><button type="button" data-d="9">Route</button></div></div>
 <div id="tst" style="display:none"><p class="note" id="tinfo"></p><div class="row"><button type="button" id="tgo">Start test</button></div></div>
 <p class="note" id="tcnt" style="display:none;margin:8px 0 0"></p>
 <div id="qbox"><p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div><div class="seg" id="dch" style="display:none"></div><div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
@@ -347,7 +347,7 @@ function terSvg(T){if(T.svg)return T.svg;var lo=1e9,hi=-1e9,i,j,o='';for(j=0;j<=
  return T.svg=o;}
 function cPt(T,f){for(var n=0;n<400;n++){var p=[rf(1,9),rf(1,9)];if(f(p))return p;}return null;}
 function gm(T,p){var g=grad(T,p[0],p[1]);return Math.hypot(g[0],g[1]);}
-function genCon(q){var T,n=0,ty=rnd(0,4),A,B;do{T=terr(Math.floor(Math.random()*1e9));}while(!T&&n++<400);q.T=T;q.mk=[];
+function genCon(q){var T=getT(),ty=rnd(0,4),A,B;q.T=T;q.mk=[];
  if(ty===2){A=cPt(T,function(p){return gm(T,p)>=.6;});B=A&&cPt(T,function(p){var a=gm(T,A),b=gm(T,p);return dist(A,p)>=2&&Math.min(a,b)>=.4&&Math.max(a,b)/Math.min(a,b)>=1.8;});
   if(!B)ty=0;else{q.k='choice';q.opts=['A','B'];q.ans=gm(T,A)>gm(T,B)?'A':'B';q.mk=[[A,'A'],[B,'B']];q.tip='Lines close together mean steep. Wide gaps mean gentle.';$('dq').textContent='Which place is steeper, A or B?';$('plh').textContent='Look at how close the lines are.';}}
  if(ty===3){A=cPt(T,function(p){var g=grad(T,p[0],p[1]),z=(Math.atan2(g[0],g[1])/SN+360)%360;return Math.hypot(g[0],g[1])>=1.5&&Math.min(z%90,90-z%90)<=25;});
@@ -356,6 +356,30 @@ function genCon(q){var T,n=0,ty=rnd(0,4),A,B;do{T=terr(Math.floor(Math.random()*
   if(!A)ty=0;else{q.k='choice';q.opts=['Spur','Draw'];q.ans=c<0?'Spur':'Draw';q.mk=[[A,'A']];q.tip='A spur sticks out downhill: the lines point downhill. A draw is a small valley: the lines point uphill.';$('dq').textContent='Is A on a spur or in a draw?';$('plh').textContent='Spur: lines point downhill. Draw: lines point uphill.';}}
  if(ty===1){q.ans=T.sad;q.tol=1;q.mk=[[T.tops[T.pr[0]],'X'],[T.tops[T.pr[1]],'Y']];$('dq').textContent='Tap the saddle between hills X and Y.';$('plh').textContent='A saddle is the low pass between two hilltops. The lines make an hourglass.';}
  if(ty===0){q.ans=T.tops[0];q.tol=.9;$('dq').textContent='Tap the highest hilltop.';$('plh').textContent='A hilltop is the centre of the smallest closed rings. Find the highest.';}}
+function getT(){var T,n=0;do{T=terr(Math.floor(Math.random()*1e9));}while(!T&&n++<400);return T;}
+function rlab(p,n){var x=gx(Math.min(9.3,Math.max(.7,p[0]))).toFixed(1),y=gy(Math.min(9.3,Math.max(.7,p[1]))).toFixed(1);return '<circle cx="'+x+'" cy="'+y+'" r="9" style="fill:var(--card);stroke:var(--fg)"/><text x="'+x+'" y="'+y+'" dy="4" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--fg)">'+n+'</text>';}
+function rln(c,a,len){var d=dv(a),h=len/2;return {s:[c[0]-d[0]*h,c[1]-d[1]*h],e:[c[0]+d[0]*h,c[1]+d[1]*h],a:a,len:len,rd:Math.random()<.5};}
+function genRoute(q){var T=getT(),S,X,az,d,u,w,n=0,ty=rnd(0,3),F=[],P=[],sd=Math.random()<.5?1:-1,ok,i,j;
+ function at(t,o){return [S[0]+u[0]*t+w[0]*o,S[1]+u[1]*t+w[1]*o];}
+ do{S=[rf(1.5,8.5),rf(1.5,8.5)];az=rnd(0,359);d=rf(4.5,6.5);u=dv(az);w=[-u[1],u[0]];X=at(d,0);F=[];P=[];ok=inG(X,1.2)&&inG(at(d+2.6,0),.2);
+  if(ty===0)F=[rln(at(d/2,sd*rf(.9,1.6)),az+rnd(-12,12),d+2),rln(at(d*rf(.4,.6),0),az+90+rnd(-15,15),6)];
+  else if(ty===1)F=[rln(at(d/2,sd*1.3),az+rnd(-10,10),d+2),rln(at(-1.5,0),az+90+rnd(-15,15),6),rln(at(d+rf(1.5,2.2),0),az+90+rnd(-15,15),6)];
+  else if(ty===2){P=[at(d-rf(.8,1.4),sd*rf(.2,.8)),at(rf(.5,1.5),rf(-1.5,1.5)),at(d/2,-sd*rf(3,3.5))];ok=ok&&P.every(function(p,k){return inG(p,.4)&&(k?dist(p,X)>=3.5:dist(p,X)<=2);});}
+  else{F=[rln(X,az+90,7)];ok=ok&&inG(at(d,sd*2.4),.3);}
+ }while(!ok&&n++<500);
+ for(i=F.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));var t=F[i];F[i]=F[j];F[j]=t;}
+ if(ty===2)P=P.map(function(p,k){return {p:p,k:k};});
+ for(i=P.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));var t2=P[i];P[i]=P[j];P[j]=t2;}
+ q.T=T;q.S=S;q.X=X;q.az=az;q.F=F;q.P=P;q.k='choice';q.ty=ty;q.opts=ty===3?['Left','Right']:F.length?F.map(function(f,k){return ''+(k+1);}):['1','2','3'];
+ if(ty===0){q.ans=''+(F.findIndex(function(f){return Math.min(adiff(f.a,az),adiff(f.a,az+180))<30;})+1);$('dq').textContent='You walk from S to X. Which numbered line is the best handrail?';$('plh').textContent='A handrail is a line feature that runs the same way as your route.';q.tip='A handrail runs the same way as your route, so you can follow it.';}
+ else if(ty===1){q.ans=''+(F.findIndex(function(f){return (f.e[0]-S[0])*u[0]+(f.e[1]-S[1])*u[1]>d&&Math.min(adiff(f.a,az+90),adiff(f.a,az+270))<30;})+1);$('dq').textContent='Which numbered line tells you that you walked past X? (a catching feature)';$('plh').textContent='It lies beyond X and across your route.';q.tip='A catching feature is a line beyond the target, across your route. Reaching it means you went too far.';}
+ else if(ty===2){q.ans=''+(P.findIndex(function(o){return o.k===0;})+1);$('dq').textContent='Which numbered spot is the best attack point for X? All are easy to see.';$('plh').textContent='Pick the easy spot closest to X.';q.tip='An attack point is an easy spot close to the target. From it, take a short careful leg to X.';}
+ else{q.hz=at(d,sd*2.4);q.ans=sd===1?'Right':'Left';$('dq').textContent='X is on the road. The cliff is on the road to one side of X. Facing X from S, which way do you aim off, to turn away from the cliff?';$('plh').textContent='Aim off to one side on purpose, so you know which way to turn at the road.';q.tip='Aim off to the side away from the cliff. At the road, turn toward X.';}}
+function routeDraw(q){var o=terSvg(q.T)+plLine(q.S,q.az,dist(q.S,q.X),'stroke="var(--fg)" stroke-width="1.5" stroke-dasharray="2 4" opacity=".6"');
+ q.F.forEach(function(f,k){var st=q.ty===3||f.rd?'stroke="var(--fg)" stroke-width="6" opacity=".28" stroke-linecap="round"':'stroke="var(--fg)" stroke-width="3" stroke-dasharray="1 6" stroke-linecap="round"';o+=plLine(f.s,f.a,f.len,st);if(q.ty!==3)o+=rlab(f.e,k+1);});
+ q.P.forEach(function(o2,k){o+=rlab(o2.p,k+1);});
+ if(q.hz)o+='<text x="'+gx(q.hz[0]).toFixed(1)+'" y="'+gy(q.hz[1]).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--bd)">Cliff</text>';
+ return o+plPt(q.S,'S')+plPt(q.X,'X');}
 var DRILLS=[
 {id:'back',name:'Back azimuth',topic:'num',kind:'num',gen:function(q){q.ans=(rnd(1,359)+180)%360;q.a=(q.ans+180)%360;$('dq').textContent='Your azimuth is '+pad(q.a)+'°. What is the back azimuth?';}},
 {id:'conv',name:'Convert',topic:'num',kind:'num',gen:function(q){genConv(q,0);}},
@@ -387,7 +411,8 @@ var DRILLS=[
   q.S=S;q.az=az;q.d=d;q.ans=P;q.tol=0.7;$('dq').textContent='From S go azimuth '+pad(az)+'° for '+d*100+' m. One square is 100 m. Tap the spot.';$('plh').textContent='Point along the azimuth from S (north is up), then count the squares.';},
  draw:function(q){return plPt(q.S,'S');},
  sol:function(q){return plLine(q.S,q.az,q.d,DS);}},
-{id:'contour',name:'Contours',topic:'ground',kind:'tap',pw:1,gen:genCon,draw:function(q){var o=terSvg(q.T);q.mk.forEach(function(m){o+=plPt(m[0],m[1]);});return o;},sol:function(q){return '';}}
+{id:'contour',name:'Contours',topic:'ground',kind:'tap',pw:1,gen:genCon,draw:function(q){var o=terSvg(q.T);q.mk.forEach(function(m){o+=plPt(m[0],m[1]);});return o;},sol:function(q){return '';}},
+{id:'route',name:'Route',topic:'ground',kind:'tap',pw:1,gen:genRoute,draw:routeDraw,sol:function(q){return '';}}
 ];
 var PG={};try{PG=JSON.parse(ld('cpProg','{}'))||{};}catch(e){PG={};}
 function drSc(){var d=DRILLS[DR.m],p=PG[d.id],o=DR.t?'Right: '+DR.r+' of '+DR.t:'';if(p&&p[1])o+=(o?' ':'')+(DR.t?'(all time ':'All time ')+Math.round(p[0]/p[1]*100)+'%'+(DR.t?')':'');$('dsc').textContent=o;}
