@@ -116,7 +116,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p><b>Grid coordinates.</b> Read right, then up (&ldquo;walk in the house, then up the stairs&rdquo;). A 6-digit grid, like 123 456, names a spot to within 100 m. An 8-digit grid, like 1234 5678, is good to 10 m.</p>
 <p><b>Scale.</b> Use the bar scale at the bottom of the map to turn map distance into ground distance. Lay a strip of paper along the route, mark it, and slide it onto the scale.</p>
 <p><b>Contour lines</b> join points of equal height. Lines close together mean steep; far apart means gentle. Every fifth line is a bold index line with a number. A closed ring is a hilltop. A ridge is high ground with lower ground on both sides. A saddle is the dip between two peaks. A draw is a small valley: its contour V&rsquo;s point uphill. A spur is a finger of high ground: its V&rsquo;s point downhill.</p>
-<p><b>Margin information.</b> Check the map&rsquo;s date, scale, contour interval and the declination diagram before you use it.</p></details>
+<p><b>Margin information.</b> Check the map&rsquo;s date, scale, contour interval and the declination diagram before you use it.</p><div class="row"><button type="button" class="pr" data-p="contour">Practice this</button></div></details>
 <details><summary>2. Azimuths and back azimuths</summary>
 <p>An azimuth is a direction in degrees, clockwise from north, 0 to 360. 90 is east, 180 south, 270 west.</p>
 <p><b>Back azimuth</b> (the way back): add 180 if the azimuth is less than 180, subtract 180 if it is 180 or more. A back azimuth of 70 is 250, and of 250 is 70.</p><div class="row"><button type="button" class="pr" data-p="back">Practice this</button></div></details>
@@ -154,10 +154,11 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <details id="drl"><summary>Practice</summary>
 <div class="seg" id="dmode" role="group" aria-label="Mode"><button type="button" data-m="d" class="on">Drills</button><button type="button" data-m="t">Test</button></div>
 <div id="dsel"><p class="note" style="margin:8px 0 2px">Numbers</p><div class="seg" id="drm" role="group" aria-label="Number drills"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="3">Which north</button><button type="button" data-d="2">Aim</button></div>
-<p class="note" style="margin:8px 0 2px">Map</p><div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button><button type="button" data-d="7">Polar</button></div></div>
+<p class="note" style="margin:8px 0 2px">Map</p><div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button><button type="button" data-d="7">Polar</button></div>
+<p class="note" style="margin:8px 0 2px">Ground</p><div class="seg" id="drg" role="group" aria-label="Ground drills"><button type="button" data-d="8">Contours</button></div></div>
 <div id="tst" style="display:none"><p class="note" id="tinfo"></p><div class="row"><button type="button" id="tgo">Start test</button></div></div>
 <p class="note" id="tcnt" style="display:none;margin:8px 0 0"></p>
-<div id="qbox"><p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div><div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
+<div id="qbox"><p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div><div class="seg" id="dch" style="display:none"></div><div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
 <div class="row" id="drow"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
 <p id="df" style="min-height:24px;font-weight:600"></p></div>
 <p class="note" id="dsc"></p><div id="tres" style="display:none"></div>
@@ -309,6 +310,52 @@ function genConv(q,ns){var e=Math.random()<.5,d=rnd(5,15),g=rnd(10,350),toMag=Ma
  if(toMag){q.ans=((e?g-d:g+d)%360+360)%360;$('dq').textContent=dTxt(d,e,ns)+'The map azimuth is '+pad(g)+'°. What does the compass read?';}
  else{q.ans=((e?g+d:g-d)%360+360)%360;$('dq').textContent=dTxt(d,e,ns)+'The compass reads '+pad(g)+'°. What is the map azimuth?';}
  q.toMag=toMag;if(ns)nsDraw(q);}
+function m32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+var CI=10;
+function hAt(T,x,y){var h=100+T.tx*(x-5)+T.ty*(y-5);T.H.forEach(function(k){var a=(x-k.x)/k.sx,b=(y-k.y)/k.sy;h+=k.h*Math.exp(-(a*a+b*b)/2);});return h;}
+function grad(T,x,y){var e=.05;return [(hAt(T,x+e,y)-hAt(T,x-e,y))/(2*e),(hAt(T,x,y+e)-hAt(T,x,y-e))/(2*e)];}
+function terr(seed){var r=m32(seed),n=3+Math.floor(r()*2),H=[],t=0,i,j;
+ while(H.length<n&&t++<200){var k={x:1.5+r()*7,y:1.5+r()*7,h:(H.length?35+r()*7:55+r()*7),sx:.9+r()*.6,sy:.9+r()*.6};if(H.every(function(o){return dist([o.x,o.y],[k.x,k.y])>=3;}))H.push(k);}
+ var T={seed:seed,H:H,tx:(r()-.5)*2,ty:(r()-.5)*2},tops=[];if(H.length<3)return null;
+ H.forEach(function(k){var p=[k.x,k.y],st=.2;for(var c=0;c<80;c++){var g=grad(T,p[0],p[1]),m=Math.hypot(g[0],g[1]);if(m<1e-3)break;var np=[p[0]+g[0]/m*st,p[1]+g[1]/m*st];if(hAt(T,np[0],np[1])>hAt(T,p[0],p[1]))p=np;else st/=2;}
+  if(inG(p,.8)&&tops.every(function(o){return dist(o,p)>1;}))tops.push(p);});
+ if(tops.length<3)return null;
+ tops.sort(function(a,b){return hAt(T,b[0],b[1])-hAt(T,a[0],a[1]);});
+ if(hAt(T,tops[0][0],tops[0][1])-hAt(T,tops[1][0],tops[1][1])<12)return null;
+ var bi=0,bj=1,bd=99;for(i=0;i<tops.length;i++)for(j=i+1;j<tops.length;j++){var dd=dist(tops[i],tops[j]);if(dd<bd){bd=dd;bi=i;bj=j;}}
+ if(bd<2.5)return null;
+ var A=tops[bi],B=tops[bj],ux=(B[0]-A[0])/bd,uy=(B[1]-A[1])/bd,best=1e9,p=null;
+ for(i=1;i<60;i++){var q=[A[0]+(B[0]-A[0])*i/60,A[1]+(B[1]-A[1])*i/60],h=hAt(T,q[0],q[1]);if(h<best){best=h;p=q;}}
+ for(var it=0;it<4;it++){var bh=-1e9,bt=0,t2;for(t2=-1;t2<=1;t2+=.05){var h2=hAt(T,p[0]-uy*t2,p[1]+ux*t2);if(h2>bh){bh=h2;bt=t2;}}p=[p[0]-uy*bt,p[1]+ux*bt];
+  bh=1e9;bt=0;for(t2=-1;t2<=1;t2+=.05){var h3=hAt(T,p[0]+ux*t2,p[1]+uy*t2);if(h3<bh){bh=h3;bt=t2;}}p=[p[0]+ux*bt,p[1]+uy*bt];}
+ var g2=grad(T,p[0],p[1]);
+ if(!inG(p,1)||Math.min(hAt(T,A[0],A[1]),hAt(T,B[0],B[1]))-hAt(T,p[0],p[1])<12||Math.hypot(g2[0],g2[1])>1.5)return null;
+ var lo=1e9,hi=-1e9;for(j=0;j<=20;j++)for(i=0;i<=20;i++){var h4=hAt(T,i/2,j/2);lo=Math.min(lo,h4);hi=Math.max(hi,h4);}
+ T.n=Math.floor(hi/CI)-Math.ceil(lo/CI)+1;if(T.n<6||T.n>8)return null;
+ T.tops=tops;T.sad=p;T.pr=[bi,bj];return T;}
+function msq(T,L){var N=40,s=10/N,V=[],o=[],i,j;for(j=0;j<=N;j++){V[j]=[];for(i=0;i<=N;i++)V[j][i]=hAt(T,i*s,j*s);}
+ for(j=0;j<N;j++)for(i=0;i<N;i++){var a=V[j][i],b=V[j][i+1],c=V[j+1][i+1],d=V[j+1][i],x0=i*s,y0=j*s,x1=x0+s,y1=y0+s;
+  var e={L:function(){return [x0,y0+s*(L-a)/(d-a)];},B:function(){return [x0+s*(L-a)/(b-a),y0];},R:function(){return [x1,y0+s*(L-b)/(c-b)];},T:function(){return [x0+s*(L-d)/(c-d),y1];}};
+  var ix=(a>=L?1:0)|(b>=L?2:0)|(c>=L?4:0)|(d>=L?8:0),hi=(a+b+c+d)/4>=L,
+   S=[0,'LB','BR','LR','RT',hi?'LT,BR':'LB,RT','BT','LT','LT','BT',hi?'LB,RT':'LT,BR','RT','LR','BR','LB',0][ix];
+  if(!S)continue;S.split(',').forEach(function(z){o.push([e[z[0]](),e[z[1]]()]);});}
+ return o;}
+function terSvg(T){if(T.svg)return T.svg;var lo=1e9,hi=-1e9,i,j,o='';for(j=0;j<=20;j++)for(i=0;i<=20;i++){var h=hAt(T,i/2,j/2);lo=Math.min(lo,h);hi=Math.max(hi,h);}
+ for(var L=Math.ceil(lo/CI)*CI;L<=hi;L+=CI){var sg=msq(T,L),ix=L%50===0,d='';sg.forEach(function(s){d+='M'+gx(s[0][0]).toFixed(1)+' '+gy(s[0][1]).toFixed(1)+'L'+gx(s[1][0]).toFixed(1)+' '+gy(s[1][1]).toFixed(1);});
+  if(d)o+='<path d="'+d+'" fill="none" style="stroke:var('+(ix?'--fg':'--mut')+')" stroke-width="'+(ix?2:1)+'"/>';
+  if(ix&&sg.length){var m=sg[sg.length>>1],lx=gx((m[0][0]+m[1][0])/2),ly=gy((m[0][1]+m[1][1])/2);o+='<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="10" text-anchor="middle" stroke-width="3" paint-order="stroke" style="fill:var(--fg);stroke:var(--card)">'+L+'</text>';}}
+ return T.svg=o;}
+function cPt(T,f){for(var n=0;n<400;n++){var p=[rf(1,9),rf(1,9)];if(f(p))return p;}return null;}
+function gm(T,p){var g=grad(T,p[0],p[1]);return Math.hypot(g[0],g[1]);}
+function genCon(q){var T,n=0,ty=rnd(0,4),A,B;do{T=terr(Math.floor(Math.random()*1e9));}while(!T&&n++<400);q.T=T;q.mk=[];
+ if(ty===2){A=cPt(T,function(p){return gm(T,p)>=.6;});B=A&&cPt(T,function(p){var a=gm(T,A),b=gm(T,p);return dist(A,p)>=2&&Math.min(a,b)>=.4&&Math.max(a,b)/Math.min(a,b)>=1.8;});
+  if(!B)ty=0;else{q.k='choice';q.opts=['A','B'];q.ans=gm(T,A)>gm(T,B)?'A':'B';q.mk=[[A,'A'],[B,'B']];q.tip='Lines close together mean steep. Wide gaps mean gentle.';$('dq').textContent='Which place is steeper, A or B?';$('plh').textContent='Look at how close the lines are.';}}
+ if(ty===3){A=cPt(T,function(p){var g=grad(T,p[0],p[1]),z=(Math.atan2(g[0],g[1])/SN+360)%360;return Math.hypot(g[0],g[1])>=1.5&&Math.min(z%90,90-z%90)<=25;});
+  if(!A)ty=0;else{var g=grad(T,A[0],A[1]),z=(Math.atan2(g[0],g[1])/SN+360)%360;q.k='choice';q.opts=['N','E','S','W'];q.ans=q.opts[Math.round(z/90)%4];q.mk=[[A,'A']];q.tip='Uphill is toward the higher elevation numbers.';$('dq').textContent='Which way is uphill from A?';$('plh').textContent='North is up. Cross the lines toward higher ground.';}}
+ if(ty===4){var c=0;A=cPt(T,function(p){var g=grad(T,p[0],p[1]),m=Math.hypot(g[0],g[1]);if(m<1)return 0;var wx=-g[1]/m*.8,wy=g[0]/m*.8;c=(hAt(T,p[0]+wx,p[1]+wy)+hAt(T,p[0]-wx,p[1]-wy))/2-hAt(T,p[0],p[1]);return Math.abs(c)>=6;});
+  if(!A)ty=0;else{q.k='choice';q.opts=['Spur','Draw'];q.ans=c<0?'Spur':'Draw';q.mk=[[A,'A']];q.tip='A spur sticks out downhill: the lines point downhill. A draw is a small valley: the lines point uphill.';$('dq').textContent='Is A on a spur or in a draw?';$('plh').textContent='Spur: lines point downhill. Draw: lines point uphill.';}}
+ if(ty===1){q.ans=T.sad;q.tol=1;q.mk=[[T.tops[T.pr[0]],'X'],[T.tops[T.pr[1]],'Y']];$('dq').textContent='Tap the saddle between hills X and Y.';$('plh').textContent='A saddle is the low pass between two hilltops. The lines make an hourglass.';}
+ if(ty===0){q.ans=T.tops[0];q.tol=.9;$('dq').textContent='Tap the highest hilltop.';$('plh').textContent='A hilltop is the centre of the smallest closed rings. Find the highest.';}}
 var DRILLS=[
 {id:'back',name:'Back azimuth',topic:'num',kind:'num',gen:function(q){q.ans=(rnd(1,359)+180)%360;q.a=(q.ans+180)%360;$('dq').textContent='Your azimuth is '+pad(q.a)+'°. What is the back azimuth?';}},
 {id:'conv',name:'Convert',topic:'num',kind:'num',gen:function(q){genConv(q,0);}},
@@ -339,11 +386,14 @@ var DRILLS=[
  gen:function(q){var S,P,az,d,n=0;do{S=[rf(1.5,8.5),rf(1.5,8.5)];az=rnd(0,359);d=rnd(2,5);var v=dv(az);P=[S[0]+v[0]*d,S[1]+v[1]*d];n++;}while(n<800&&!inG(P,0.5));
   q.S=S;q.az=az;q.d=d;q.ans=P;q.tol=0.7;$('dq').textContent='From S go azimuth '+pad(az)+'° for '+d*100+' m. One square is 100 m. Tap the spot.';$('plh').textContent='Point along the azimuth from S (north is up), then count the squares.';},
  draw:function(q){return plPt(q.S,'S');},
- sol:function(q){return plLine(q.S,q.az,q.d,DS);}}
+ sol:function(q){return plLine(q.S,q.az,q.d,DS);}},
+{id:'contour',name:'Contours',topic:'ground',kind:'tap',pw:1,gen:genCon,draw:function(q){var o=terSvg(q.T);q.mk.forEach(function(m){o+=plPt(m[0],m[1]);});return o;},sol:function(q){return '';}}
 ];
 var PG={};try{PG=JSON.parse(ld('cpProg','{}'))||{};}catch(e){PG={};}
 function drSc(){var d=DRILLS[DR.m],p=PG[d.id],o=DR.t?'Right: '+DR.r+' of '+DR.t:'';if(p&&p[1])o+=(o?' ':'')+(DR.t?'(all time ':'All time ')+Math.round(p[0]/p[1]*100)+'%'+(DR.t?')':'');$('dsc').textContent=o;}
 function pgAdd(id,ok){var p=PG[id]||[0,0];p=[p[0]+(ok?1:0),p[1]+1];if(p[1]>999)p=[Math.round(p[0]*500/p[1]),500];PG[id]=p;sv('cpProg',JSON.stringify(PG));}
+function kd(){var q=DR.q;return (q&&q.k)||DRILLS[DR.m].kind;}
+function chCheck(q,f){if(DR.ch===null){f.textContent='Choose an answer first.';f.style.color='';return null;}if(DR.done)return null;DR.done=1;var ok=DR.ch===q.ans;f.textContent=ok?'Right.':'Not quite. The answer is '+q.ans+'.'+(q.tip?' '+q.tip:'');return ok;}
 function tapCheck(q,f,d){if(!DR.tap){f.textContent='Tap the map first.';f.style.color='';return null;}if(DR.done)return null;
  var dd=dist(DR.tap,q.ans),ok=dd<=q.tol;DR.done=1;
  f.textContent=ok?'Right. Within '+fx(dd)+' squares.':'About '+fx(dd)+' squares off. The green ring is the answer.'+(d.hint?d.hint(q,DR.tap):'');plDraw();return ok;}
@@ -357,17 +407,19 @@ function nsDraw(q){var o='',cx=170,cy=104,ex=q.east?1:-1,ang=ex*Math.min(q.d*2.2
  o+='<g transform="translate('+cx+','+cy+')"><line x1="0" y1="0" x2="0" y2="-86" style="stroke:var(--fg)" stroke-width="3"/><path d="M0 -92 L6 -78 L-6 -78 Z" style="fill:var(--fg)"/><text x="-8" y="-96" text-anchor="end" font-size="13" font-weight="700" style="fill:var(--fg)">Grid N</text>';
  o+='<g transform="rotate('+ang+')"><line x1="0" y1="0" x2="0" y2="-86" style="stroke:var(--needle)" stroke-width="3"/><path d="M0 -92 L6 -78 L-6 -78 Z" style="fill:var(--needle)"/><text x="'+(ex>0?8:-8)+'" y="-96" text-anchor="'+(ex>0?'start':'end')+'" font-size="13" font-weight="700" style="fill:var(--needle)">Mag N</text></g></g>';
  $('pls').setAttribute('viewBox','0 0 340 120');$('pls').innerHTML=o;}
-function drNew(){var m=DR.m,d=DRILLS[m],q={};DR.tap=null;DR.done=0;$('df').textContent='';$('df').style.color='';$('da').value='';$('plh').textContent='';
- $('dar').style.display=d.kind==='num'?'':'none';$('plw').hidden=!d.pw;$('pls').setAttribute('viewBox','0 0 340 340');
- d.gen(q);DR.q=q;if(d.kind==='tap')plDraw();drSc();}
-$('pls').addEventListener('click',function(e){if(DRILLS[DR.m].kind!=='tap'||DR.done)return;var r=this.getBoundingClientRect();DR.tap=[(e.clientX-r.left)/r.width*10,10-(e.clientY-r.top)/r.height*10];plDraw();});
+function drNew(){var m=DR.m,d=DRILLS[m],q={};DR.tap=null;DR.ch=null;DR.done=0;$('df').textContent='';$('df').style.color='';$('da').value='';$('plh').textContent='';
+ $('pls').setAttribute('viewBox','0 0 340 340');d.gen(q);DR.q=q;var k=kd();
+ $('dar').style.display=k==='num'?'':'none';$('plw').hidden=!d.pw;$('dch').style.display=k==='choice'?'':'none';$('dch').innerHTML=k==='choice'?q.opts.map(function(o){return '<button type="button" data-v="'+o+'">'+o+'</button>';}).join(''):'';
+ if(d.draw)plDraw();drSc();}
+$('dch').onclick=function(e){var b=e.target;if(b.tagName!=='BUTTON'||DR.done)return;DR.ch=b.dataset.v;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b);});};
+$('pls').addEventListener('click',function(e){if(kd()!=='tap'||DR.done)return;var r=this.getBoundingClientRect();DR.tap=[(e.clientX-r.left)/r.width*10,10-(e.clientY-r.top)/r.height*10];plDraw();});
 function drCheck(){var q=DR.q,f=$('df'),d=DRILLS[DR.m],ok;if(!q)return;
- ok=d.check?d.check(q,f):d.kind==='tap'?tapCheck(q,f,d):numCheck(q,f,d);if(ok===null)return;DR.t++;if(ok)DR.r++;
+ var k=kd();ok=d.check?d.check(q,f):k==='tap'?tapCheck(q,f,d):k==='choice'?chCheck(q,f):numCheck(q,f,d);if(ok===null)return;DR.t++;if(ok)DR.r++;
  pgAdd(d.id,ok);
  f.style.color=ok?'var(--ok)':'var(--bd)';drSc();}
 $('drr').onclick=function(e){e.preventDefault();if(!confirm('Clear all practice and test progress?'))return;PG={};DR.r=0;DR.t=0;try{localStorage.removeItem('cpProg');localStorage.removeItem('cpTest');}catch(x){}drSc();if($('tst').style.display!=='none')tsInfo();};
-document.querySelectorAll('#drm button,#drp button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
-function openDrill(id){setMode('d');var i=DRILLS.findIndex(function(x){return x.id===id;});if(i<0)return;DR.m=i;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',+x.dataset.d===i);});drNew();$('drl').open=true;$('drl').scrollIntoView();}
+document.querySelectorAll('#drm button,#drp button,#drg button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button,#drp button,#drg button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
+function openDrill(id){setMode('d');var i=DRILLS.findIndex(function(x){return x.id===id;});if(i<0)return;DR.m=i;document.querySelectorAll('#drm button,#drp button,#drg button').forEach(function(x){x.classList.toggle('on',+x.dataset.d===i);});drNew();$('drl').open=true;$('drl').scrollIntoView();}
 document.querySelectorAll('.pr').forEach(function(b){b.onclick=function(){openDrill(b.dataset.p);};});
 var TS={on:0,i:0,l:[],res:[]},TOP={num:0,map:1,ground:2};
 function g(id,s){$(id).style.display=s?'':'none';}
@@ -378,7 +430,8 @@ function tsList(){var el=[];DRILLS.forEach(function(d,k){if(d.kind!=='sensor')el
 function tsQ(){DR.m=TS.l[TS.i];drNew();$('plh').textContent='';$('df').textContent='';$('tcnt').textContent='Question '+(TS.i+1)+' of 10';$('dck').textContent=TS.i===9?'Finish':'Next';}
 function tsStart(){TS.on=1;TS.i=0;TS.res=[];TS.l=tsList();view('q');tsQ();}
 function tsNext(){var d=DRILLS[DR.m],q=DR.q,f=$('df'),ok,a;
- if(d.kind==='tap'){if(!DR.tap){f.textContent='Tap the map first.';return;}var dd=dist(DR.tap,q.ans);ok=dd<=q.tol;a='Right answer: x '+fx(q.ans[0])+', y '+fx(q.ans[1])+' (squares from the bottom left). You were '+fx(dd)+' squares off.';}
+ var k=kd();if(k==='choice'){if(DR.ch===null){f.textContent='Choose an answer first.';return;}ok=DR.ch===q.ans;a='Right answer: '+q.ans+'.';}
+ else if(k==='tap'){if(!DR.tap){f.textContent='Tap the map first.';return;}var dd=dist(DR.tap,q.ans);ok=dd<=q.tol;a='Right answer: x '+fx(q.ans[0])+', y '+fx(q.ans[1])+' (squares from the bottom left). You were '+fx(dd)+' squares off.';}
  else{var v=parseInt($('da').value,10);if(!isFinite(v)){f.textContent='Type a number first.';return;}v=((v%360)+360)%360;ok=v===q.ans;a='Right answer: '+pad(q.ans)+'°. You wrote '+pad(v)+'°.';}
  f.textContent='';TS.res.push({id:d.id,ok:ok,q:$('dq').textContent,a:a});pgAdd(d.id,ok);TS.i++;if(TS.i<10)tsQ();else tsEnd();}
 function tsEnd(){TS.on=0;view('r');var sc=TS.res.filter(function(r){return r.ok;}).length,by={},weak=null,h='';
@@ -391,7 +444,7 @@ function tsEnd(){TS.on=0;view('r');var sc=TS.res.filter(function(r){return r.ok;
 document.querySelectorAll('#dmode button').forEach(function(b){b.onclick=function(){setMode(b.dataset.m);};});
 $('tgo').onclick=tsStart;
 $('tres').onclick=function(e){var t=e.target;if(t.classList.contains('pr'))openDrill(t.dataset.p);else if(t.id==='tagain')tsStart();else if(t.id==='tback')setMode('d');};
-$('dck').onclick=function(){if(TS.on)tsNext();else drCheck();};$('dnx').onclick=drNew;drNew();window.cpTest={DR:DR,azOf:azOf,adiff:adiff,drNew:drNew};
+$('dck').onclick=function(){if(TS.on)tsNext();else drCheck();};$('dnx').onclick=drNew;drNew();window.cpTest={DR:DR,azOf:azOf,adiff:adiff,drNew:drNew,terr:terr,terSvg:terSvg,hAt:hAt};
 nightUI();refUI();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
 })();
