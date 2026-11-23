@@ -112,7 +112,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p><b>Rough clues.</b> The Sun rises roughly east and sets roughly west. At solar noon it is due south (north of 23.4&deg;N, which includes Arizona), and its shadow points north.</p></details>
 <details id="drl"><summary>Practice drills</summary>
 <div class="seg" id="drm" role="group" aria-label="Number drills"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="3">Which north</button><button type="button" data-d="2">Aim</button></div>
-<div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button></div>
+<div class="seg" id="drp" role="group" aria-label="Map drills"><button type="button" data-d="4">Intersection</button><button type="button" data-d="5">Resection</button><button type="button" data-d="6">On a road</button><button type="button" data-d="7">Polar</button></div>
 <p id="dq" style="font-size:16px;margin:8px 0"></p><div id="plw" hidden><svg id="pls" viewBox="0 0 340 340" role="img" aria-label="Practice map" style="display:block;width:100%;max-width:340px;margin:0 auto;border:1px solid var(--line);border-radius:8px;background:var(--card);touch-action:manipulation"></svg><p class="note" id="plh" style="margin:4px 0 0"></p></div>
 <div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
 <div class="row"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
@@ -145,7 +145,7 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p>If you are on a linear feature such as a road, trail or stream, one landmark is enough.</p>
 <ol><li>Shoot an azimuth to one landmark you can find on the map.</li><li>Convert it and work out the back azimuth.</li><li>Plot the back-azimuth line from the landmark.</li><li>You are where that line crosses the linear feature.</li></ol><div class="row"><button type="button" class="pr" data-p="road">Practice this</button></div></details>
 <details><summary>8. Polar coordinates: describe a place by direction and distance</summary>
-<p>A polar report gives a start point, a direction and a distance, for example: &ldquo;from the water tower, azimuth 135, 800 m.&rdquo; To find it, plot the start point, draw a line along the grid azimuth, and measure off the distance on the map scale.</p></details>
+<p>A polar report gives a start point, a direction and a distance, for example: &ldquo;from the water tower, azimuth 135, 800 m.&rdquo; To find it, plot the start point, draw a line along the grid azimuth, and measure off the distance on the map scale.</p><div class="row"><button type="button" class="pr" data-p="polar">Practice this</button></div></details>
 <details><summary>9. Pace count and dead reckoning</summary>
 <p><b>Pace count.</b> Count each time the same foot lands (a double pace). Walk a known 100 m on flat ground and count: most people land around 60 to 70. Your own number is the one that matters.</p>
 <p>You take more paces uphill, in sand or mud, at night, with a pack or tired. Fewer downhill. Keep tally with knots in a cord or beads, one per 100 m.</p>
@@ -330,7 +330,12 @@ var DRILLS=[
   $('dq').textContent='You are on the road (the thick line). Declination is '+d3+'° '+(e3?'east':'west')+'. The compass azimuth from you to the tower L is '+pad(q.mag)+'°. Tap where you are.';$('plh').textContent='Back azimuth from L, in map terms, meets the road at your spot.';},
  draw:function(q){return plLine(q.R0,q.ra,16,'stroke="var(--fg)" stroke-width="7" opacity=".28" stroke-linecap="round"')+plPt(q.L,'L');},
  sol:function(q){return plLine(q.L,(q.g+180)%360,16,DS);},
- hint:function(q,t){var w=inter(q.L,(q.mag+180)%360,q.R0,q.ra);return w&&dist(t,w)<1.2?DECL:'';}}
+ hint:function(q,t){var w=inter(q.L,(q.mag+180)%360,q.R0,q.ra);return w&&dist(t,w)<1.2?DECL:'';}},
+{id:'polar',name:'Polar',topic:'map',kind:'tap',pw:1,
+ gen:function(q){var S,P,az,d,n=0;do{S=[rf(1.5,8.5),rf(1.5,8.5)];az=rnd(0,359);d=rnd(2,5);var v=dv(az);P=[S[0]+v[0]*d,S[1]+v[1]*d];n++;}while(n<800&&!inG(P,0.5));
+  q.S=S;q.az=az;q.d=d;q.ans=P;q.tol=0.7;$('dq').textContent='From S go azimuth '+pad(az)+'° for '+d*100+' m. One square is 100 m. Tap the spot.';$('plh').textContent='Point along the azimuth from S (north is up), then count the squares.';},
+ draw:function(q){return plPt(q.S,'S');},
+ sol:function(q){return plLine(q.S,q.az,q.d,DS);}}
 ];
 var PG={};try{PG=JSON.parse(ld('cpProg','{}'))||{};}catch(e){PG={};}
 function drSc(){var d=DRILLS[DR.m],p=PG[d.id],o=DR.t?'Right: '+DR.r+' of '+DR.t:'';if(p&&p[1])o+=(o?' ':'')+(DR.t?'(all time ':'All time ')+Math.round(p[0]/p[1]*100)+'%'+(DR.t?')':'');$('dsc').textContent=o;}
