@@ -126,24 +126,24 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p><b>Margin information.</b> Check the map&rsquo;s date, scale, contour interval and the declination diagram before you use it.</p></details>
 <details><summary>2. Azimuths and back azimuths</summary>
 <p>An azimuth is a direction in degrees, clockwise from north, 0 to 360. 90 is east, 180 south, 270 west.</p>
-<p><b>Back azimuth</b> (the way back): add 180 if the azimuth is less than 180, subtract 180 if it is 180 or more. A back azimuth of 70 is 250, and of 250 is 70.</p></details>
+<p><b>Back azimuth</b> (the way back): add 180 if the azimuth is less than 180, subtract 180 if it is 180 or more. A back azimuth of 70 is 250, and of 250 is 70.</p><div class="row"><button type="button" class="pr" data-p="back">Practice this</button></div></details>
 <details><summary>3. Three norths and the grid-magnetic (G-M) angle</summary>
 <p><b>True north</b> is the North Pole. <b>Grid north</b> is the direction of the map&rsquo;s vertical grid lines. <b>Magnetic north</b> is where the needle points. The declination diagram on the map shows how they differ, and the G-M angle is the gap between grid north and magnetic north.</p>
-<p>A map azimuth is a grid azimuth, and a compass reads magnetic, so you convert in between. Map to compass: subtract if magnetic is east (right), add if west (left). That is LARS: Left Add, Right Subtract. Compass to map: the reverse. Check the diagram. In this app, True N already adds Chandler&rsquo;s declination for you. Grid north differs from true north by about half a degree here, so use the map&rsquo;s G-M angle.</p></details>
+<p>A map azimuth is a grid azimuth, and a compass reads magnetic, so you convert in between. Map to compass: subtract if magnetic is east (right), add if west (left). That is LARS: Left Add, Right Subtract. Compass to map: the reverse. Check the diagram. In this app, True N already adds Chandler&rsquo;s declination for you. Grid north differs from true north by about half a degree here, so use the map&rsquo;s G-M angle.</p><div class="row"><button type="button" class="pr" data-p="conv">Practice this</button></div></details>
 <details><summary>4. Using the lensatic compass</summary>
 <p><b>Center-hold:</b> open the compass, thumb through the loop, elbows tucked at your sides, the compass in the middle of your chest. Turn your whole body, not your wrists. This is quick and good for walking an azimuth.</p>
 <p><b>Compass-to-cheek:</b> hold the compass up to your cheek, sight along the wire and the slot at the target, and read the card through the lens. This is slower and more accurate, and it is how you shoot an azimuth to a landmark.</p>
 <p>Keep the compass away from vehicles, power lines, steel and weapons. They pull the needle. Rough safe gaps from the Army manual: power lines 55 m, vehicles 18 m, barbed wire 10 m (check before relying on them).</p></details>
 <details><summary>5. Intersection: find a point you can see</summary>
 <p>Use this to locate something you can see but cannot reach, such as a tower or a smoke plume.</p>
-<ol><li>From where you stand, shoot an azimuth to the target and convert it to a grid azimuth.</li><li>Plot the line on the map from your known spot.</li><li>Move to a second known spot and repeat.</li><li>The target is where the lines cross. A third line checks it.</li></ol></details>
+<ol><li>From where you stand, shoot an azimuth to the target and convert it to a grid azimuth.</li><li>Plot the line on the map from your known spot.</li><li>Move to a second known spot and repeat.</li><li>The target is where the lines cross. A third line checks it.</li></ol><div class="row"><button type="button" class="pr" data-p="inter">Practice this</button></div></details>
 <details><summary>6. Resection: find where you are</summary>
 <p>Lost? Use two or three landmarks you can find on the map.</p>
 <ol><li>Orient the map to north and pick landmarks that are well apart. Lines that cross near 90&deg; are best; shallow crossings are sloppy.</li><li>Shoot a magnetic azimuth to each landmark and convert it to grid.</li><li>Work out each back azimuth (add or subtract 180).</li><li>Plot a line from each landmark along its back azimuth.</li><li>You are where the lines cross. With three lines, the small triangle they make shows how good your shots were. A big triangle means recheck.</li></ol>
-<p>In this app, the Lensatic style helps: aim, tap Use heading to save the sighted bearing, and read the back azimuth.</p></details>
+<p>In this app, the Lensatic style helps: aim, tap Use heading to save the sighted bearing, and read the back azimuth.</p><div class="row"><button type="button" class="pr" data-p="resec">Practice this</button></div></details>
 <details><summary>7. Modified resection: you are on a road or stream</summary>
 <p>If you are on a linear feature such as a road, trail or stream, one landmark is enough.</p>
-<ol><li>Shoot an azimuth to one landmark you can find on the map.</li><li>Convert it and work out the back azimuth.</li><li>Plot the back-azimuth line from the landmark.</li><li>You are where that line crosses the linear feature.</li></ol></details>
+<ol><li>Shoot an azimuth to one landmark you can find on the map.</li><li>Convert it and work out the back azimuth.</li><li>Plot the back-azimuth line from the landmark.</li><li>You are where that line crosses the linear feature.</li></ol><div class="row"><button type="button" class="pr" data-p="road">Practice this</button></div></details>
 <details><summary>8. Polar coordinates: describe a place by direction and distance</summary>
 <p>A polar report gives a start point, a direction and a distance, for example: &ldquo;from the water tower, azimuth 135, 800 m.&rdquo; To find it, plot the start point, draw a line along the grid azimuth, and measure off the distance on the map scale.</p></details>
 <details><summary>9. Pace count and dead reckoning</summary>
@@ -357,6 +357,8 @@ function drCheck(){var q=DR.q,f=$('df'),d=DRILLS[DR.m],ok;if(!q)return;
  f.style.color=ok?'var(--ok)':'var(--bd)';drSc();}
 $('drr').onclick=function(e){e.preventDefault();if(!confirm('Clear all practice and test progress?'))return;PG={};DR.r=0;DR.t=0;try{localStorage.removeItem('cpProg');localStorage.removeItem('cpTest');}catch(x){}drSc();};
 document.querySelectorAll('#drm button,#drp button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
+function openDrill(id){var i=DRILLS.findIndex(function(x){return x.id===id;});if(i<0)return;DR.m=i;document.querySelectorAll('#drm button,#drp button').forEach(function(x){x.classList.toggle('on',+x.dataset.d===i);});drNew();$('drl').open=true;$('drl').scrollIntoView();}
+document.querySelectorAll('.pr').forEach(function(b){b.onclick=function(){openDrill(b.dataset.p);};});
 $('dck').onclick=drCheck;$('dnx').onclick=drNew;drNew();window.cpTest={DR:DR,azOf:azOf,adiff:adiff,drNew:drNew};
 nightUI();refUI();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
