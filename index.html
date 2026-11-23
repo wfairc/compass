@@ -110,6 +110,12 @@ body.night .bz{fill:#120504}body.night .bzt{fill:#d23a2c}body.night .bzl{stroke:
 <p><b>Sun and a stick.</b> Push a stick upright. Mark the end of its shadow, wait 15 minutes, mark it again. The line from the first mark to the second runs roughly west to east.</p>
 <p><b>Polaris.</b> In the northern hemisphere the North Star is within about 1&deg; of true north. Find it by following the two end stars of the Big Dipper's bowl, or look for the W of Cassiopeia on the opposite side. Its height above the horizon equals your latitude (about 33&deg; in Chandler).</p>
 <p><b>Rough clues.</b> The Sun rises roughly east and sets roughly west. At solar noon it is due south from the northern hemisphere, and its shadow points north.</p></details>
+<details id="drl"><summary>Practice drills</summary>
+<div class="seg" id="drm" role="group" aria-label="Drill type"><button type="button" data-d="0" class="on">Back azimuth</button><button type="button" data-d="1">Convert</button><button type="button" data-d="2">Aim</button></div>
+<p id="dq" style="font-size:16px;margin:8px 0"></p>
+<div class="bw" id="dar"><span>Your answer</span><input id="da" type="number" min="0" max="359" inputmode="numeric" aria-label="Your answer"></div>
+<div class="row"><button type="button" id="dck">Check</button><button type="button" id="dnx">Next</button></div>
+<p id="df" style="min-height:24px;font-weight:600"></p><p class="note" id="dsc"></p></details>
 <h1 style="margin-top:18px;font-size:18px">Land navigation course</h1>
 <p class="note" style="margin-top:0">A plain-language summary of the standard methods taught in military land navigation courses, written from general knowledge. It is not the official manual and not a replacement for training or practice on the ground.</p>
 <details><summary>1. Reading the map: grids, scale, contours</summary>
@@ -275,6 +281,25 @@ $('prac').onclick=function(){demo=!demo;this.classList.toggle('on',demo);$('demo
 $('demo').oninput=function(){demoH=parseInt(this.value,10)||0;$('demov').textContent=demoH+'\u00B0';draw();};
 function decUI(){var v=parseInt($('decr').value,10);$('decneedle').setAttribute('transform','rotate('+v*2+')');$('decv').textContent=Math.abs(v)+'\u00B0 '+(v>=0?'E':'W');}
 $('decr').oninput=decUI;decUI();mk();
+
+var DR={m:0,q:null,r:0,t:0};
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function drNew(){var m=DR.m,q={};$('df').textContent='';$('df').style.color='';$('da').value='';
+ $('dar').style.display=m===2?'none':'';
+ if(m===0){q.a=rnd(1,359);q.ans=(q.a+180)%360;$('dq').textContent='Your azimuth is '+pad(q.a)+'\u00B0. What is the back azimuth?';}
+ else if(m===1){var e=Math.random()<.5,d=rnd(5,15),g=rnd(10,350),toMag=Math.random()<.5;q.d=d;
+  if(toMag){q.ans=((e?g-d:g+d)%360+360)%360;$('dq').textContent='The map azimuth is '+pad(g)+'\u00B0. Declination is '+d+'\u00B0 '+(e?'east':'west')+'. What does the compass read?';}
+  else{q.ans=((e?g+d:g-d)%360+360)%360;$('dq').textContent='The compass reads '+pad(g)+'\u00B0. Declination is '+d+'\u00B0 '+(e?'east':'west')+'. What is the map azimuth?';}}
+ else{q.ans=rnd(0,359);$('dq').textContent='Turn to '+pad(q.ans)+'\u00B0. Use the Practice slider, then tap Check.';}
+ DR.q=q;}
+function drCheck(){var q=DR.q,f=$('df'),ok=false;if(!q)return;
+ if(DR.m===2){if(!demo){$('prac').click();f.textContent='Practice mode is on. Use the slider, then tap Check.';f.style.color='';return;}
+  var h=curH(),dd=Math.abs(((h-q.ans+540)%360)-180);ok=dd<=3;DR.t++;if(ok)DR.r++;f.textContent=ok?'Right. You are on '+pad(q.ans)+'\u00B0.':'You are '+Math.round(dd)+'\u00B0 off. Keep turning.';}
+ else{var v=parseInt($('da').value,10);if(!isFinite(v)){f.textContent='Type a number first.';f.style.color='';return;}
+  ok=(((v%360)+360)%360)===q.ans;DR.t++;if(ok)DR.r++;f.textContent=ok?'Right.':'Not quite. The answer is '+pad(q.ans)+'\u00B0.';}
+ f.style.color=ok?'var(--ok)':'var(--bd)';$('dsc').textContent='Right: '+DR.r+' of '+DR.t;}
+document.querySelectorAll('#drm button').forEach(function(b){b.onclick=function(){DR.m=+b.dataset.d;document.querySelectorAll('#drm button').forEach(function(x){x.classList.toggle('on',x===b);});drNew();};});
+$('dck').onclick=drCheck;$('dnx').onclick=drNew;drNew();
 nightUI();refUI();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
 })();
